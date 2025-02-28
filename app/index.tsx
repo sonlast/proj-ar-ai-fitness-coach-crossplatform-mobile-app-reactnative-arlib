@@ -1,13 +1,15 @@
-import React  from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-// import { useFonts } from 'expo-font';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useFonts } from 'expo-font';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import LinearGradient_ from '../components/LinearGradient_';
 // import * as SplashScreen from 'expo-splash-screen';
 
 const index = () => {
-  // const [fontsLoaded, fontsError] = useFonts({
-  //   'Snippet-Regular': require('../assets/fonts/Snippet-Regular.ttf'),
-  // });
+  const [fontsLoaded, fontsError] = useFonts({
+    'Snippet-Regular': require('../assets/fonts/Snippet-Regular.ttf'),
+  });
 
   // useEffect(() => {
   //   if (fontsLoaded || fontsError) {
@@ -15,15 +17,36 @@ const index = () => {
   //   }
   // }, [fontsLoaded, fontsError]);
 
-  // if (!fontsLoaded && !fontsError) {
-  //   return null;
-  // }
+  if (!fontsLoaded && !fontsError) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
       <LinearGradient_ />
-      <View>
+      <View style={styles.container}>
         <Text style={styles.appName}> AR FitCoach </Text>
+        <Pressable onPress={() => console.log('Speak')} style={styles.speakButton}>
+          <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: "#000" }} />
+        </Pressable>
+        <View style={{ marginTop: 40 }}>
+          <Text style={styles.basicText}>
+            TAP TO SPEAK
+          </Text>
+        </View>
+        <View style={{ marginTop: 40 }}>
+          <Text style={styles.smallText}>
+            OR
+          </Text>
+        </View>
+        <View style={{ marginTop: 40 }}>
+          <Text style={styles.basicText}>
+            Search Manually
+          </Text>
+        </View>
+        <Pressable onPress={() => console.log("Search")} style={styles.searchButton}>
+          <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={{ color: "#fff" }} />
+        </Pressable>
       </View>
     </View>
   )
@@ -36,7 +59,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   appName: {
-    fontSize: 40,
+    color: 'white',
+    fontSize: 60,
+    fontFamily: 'Snippet-Regular'
+  },
+  speakButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 200,
+    height: 200,
+    margin: 20,
+    borderRadius: 100,
+    backgroundColor: "#D9D9D9",
+    marginTop: 90,
+    marginHorizontal: "auto"
+  },
+  searchButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 50,
+    height: 50,
+    margin: 20,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: 'white',
+    backgroundColor: "#000000",
+    marginTop: 40,
+    marginHorizontal: "auto"
+  },
+  basicText: {
+    color: 'white',
+    fontSize: 18,
+    fontFamily: 'Snippet-Regular'
+  },
+  smallText: {
+    color: 'white',
+    fontSize: 14,
     fontFamily: 'Snippet-Regular'
   }
 })
