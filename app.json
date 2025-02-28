@@ -36,8 +36,7 @@
       [
         "expo-font",
         {
-          "fonts": 
-          {
+          "fonts": {
             "Snippet-Regular": "./assets/fonts/Snippet-Regular.ttf"
           }
         }
