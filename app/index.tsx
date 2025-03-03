@@ -26,7 +26,7 @@ const index = () => {
       <LinearGradient_ />
       <View style={styles.container}>
         <Text style={styles.appName}> AR FitCoach </Text>
-        <Pressable onPress={() => console.log('Speak')} style={styles.speakButton}>
+        <Pressable onPress={() => console.log("Speak")} style={styles.speakButton}>
           <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: "#000" }} />
         </Pressable>
         <View style={{ marginTop: 40 }}>
