@@ -1,26 +1,11 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import LinearGradient_ from '../components/LinearGradient_';
-// import * as SplashScreen from 'expo-splash-screen';
+import { Fonts } from '../constants/Fonts';
 
 const index = () => {
-  const [fontsLoaded, fontsError] = useFonts({
-    'Snippet-Regular': require('../assets/fonts/Snippet-Regular.ttf'),
-  });
-
-  // useEffect(() => {
-  //   if (fontsLoaded || fontsError) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [fontsLoaded, fontsError]);
-
-  if (!fontsLoaded && !fontsError) {
-    return null;
-  }
-
   return (
     <View style={styles.container}>
       <LinearGradient_ />
@@ -61,7 +46,7 @@ const styles = StyleSheet.create({
   appName: {
     color: 'white',
     fontSize: 60,
-    fontFamily: 'Snippet-Regular'
+    fontFamily: Fonts.mainFont
   },
   speakButton: {
     justifyContent: "center",
@@ -90,12 +75,12 @@ const styles = StyleSheet.create({
   basicText: {
     color: 'white',
     fontSize: 18,
-    fontFamily: 'Snippet-Regular'
+    fontFamily: Fonts.mainFont
   },
   smallText: {
     color: 'white',
     fontSize: 14,
-    fontFamily: 'Snippet-Regular'
+    fontFamily: Fonts.mainFont
   }
 })
 
