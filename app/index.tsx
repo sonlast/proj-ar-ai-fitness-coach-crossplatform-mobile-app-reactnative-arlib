@@ -6,6 +6,7 @@ import LinearGradient_ from '../components/LinearGradient_';
 import { Fonts } from '../constants/Fonts';
 
 const index = () => {
+  console.log(`REVAI API KEY: ${process.env.EXPO_PUBLIC_REVAI_API}`)
   return (
     <View style={styles.container}>
       <LinearGradient_ />
