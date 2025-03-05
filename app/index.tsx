@@ -10,7 +10,8 @@ import { Fonts } from '../constants/Fonts';
 const index = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
-
+  const [iconColor, setIconColor] = useState("#000");
+  const [borderColor, setBorderColor] = useState("#D9D9D9");
   const startRecording = async () => {
     try {
       console.log("Starting recording...");
@@ -28,6 +29,14 @@ const index = () => {
       await recording.startAsync();
       setRecording(recording);
       setIsRecording(true);
+      setIconColor("#0f0");
+      setBorderColor("#0f0");
+
+      setTimeout(() => {
+        setIconColor("#f00");
+        setBorderColor("#f00");
+      }, 1000);
+
       console.log("Recording started");
     } catch (err) {
       console.error('Failed to start recording', err);
@@ -44,6 +53,8 @@ const index = () => {
       console.log("Recording stopped and stored at", uri);
       setRecording(null);
       setIsRecording(false);
+      setIconColor("#000");
+      setBorderColor("#D9D9D9");
       console.log("Recording stopped");
     } catch (err) {
       console.error('Failed to stop recording', err);
@@ -60,14 +71,14 @@ const index = () => {
     requestPermission();
   }, []);
 
-  console.log(`REVAI API KEY: ${process.env.EXPO_PUBLIC_REVAI_API}`)
+  // console.log(`REVAI API KEY: ${process.env.EXPO_PUBLIC_REVAI_API}`)
   return (
     <View style={styles.container}>
       <LinearGradient_ />
       <View style={styles.container}>
         <Text style={styles.appName}> AR FitCoach </Text>
-        <Pressable onPress={isRecording ? stopRecording : startRecording } style={styles.speakButton}>
-          <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: isRecording ? "#f00" : "#000" }} />
+        <Pressable onPress={isRecording ? stopRecording : startRecording} style={[styles.speakButton, { borderWidth: 3, borderColor: borderColor }]}>
+          <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
         </Pressable>
         <View style={{ marginTop: 40 }}>
           <Text style={styles.basicText}>
