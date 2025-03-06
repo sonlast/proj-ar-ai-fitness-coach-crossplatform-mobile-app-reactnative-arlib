@@ -3,6 +3,7 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Audio } from 'expo-av';
+import { Link } from 'expo-router';
 import LinearGradient_ from '../components/LinearGradient_';
 
 import { Fonts } from '../constants/Fonts';
@@ -85,7 +86,7 @@ const index = () => {
           <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
         </Pressable>
         <View style={{ marginTop: 40 }}>
-          <Text style={[styles.basicText, {color: textColor}]}>
+          <Text style={[styles.basicText, { color: textColor }]}>
             {isRecording ? "TAP TO STOP" : "TAP TO SPEAK"}
           </Text>
         </View>
@@ -99,9 +100,11 @@ const index = () => {
             Search Manually
           </Text>
         </View>
-        <Pressable onPress={() => console.log("Search")} style={styles.searchButton}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={{ color: "#fff" }} />
-        </Pressable>
+        <Link href="/search" asChild>
+          <Pressable onPress={() => console.log("Search")} style={styles.searchButton}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={{ color: "#fff" }} />
+          </Pressable>
+        </Link>
       </View>
     </View>
   )
@@ -155,3 +158,75 @@ const styles = StyleSheet.create({
 })
 
 export default index;
+
+// import React, { useState } from 'react';
+
+// import { View, TextInput, StyleSheet } from 'react-native';
+
+
+
+// const ExpandableSearchBar = () => {
+
+//   const [isExpanded, setIsExpanded] = useState(false);
+
+
+
+//   const handleIconPress = () => {
+
+//     setIsExpanded(!isExpanded);
+
+//   };
+
+
+
+//   return (
+
+//     <View style={styles.container}>
+
+//       <TouchableOpacity onPress={handleIconPress}>
+
+//         {/* Render your search icon here */}
+
+//       </TouchableOpacity>
+
+//       {isExpanded && (
+
+//         <TextInput 
+
+//           style={styles.searchInput} 
+
+//           placeholder="Search..." 
+
+//           onFocus={() => setIsExpanded(true)} 
+
+//         />
+
+//       )}
+
+//     </View>
+
+//   );
+
+// };
+
+
+
+// const styles = StyleSheet.create({
+
+//   container: {
+
+//     // ... Container styling
+
+//   },
+
+//   searchInput: {
+
+//     // ... Expanded search bar styling
+
+//   },
+
+// });
+
+
+
+// export default ExpandableSearchBar;
