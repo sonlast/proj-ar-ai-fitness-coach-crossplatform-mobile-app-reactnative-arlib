@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 
-export default class LinearGradient_ extends Component {
-  render() {
+const LinearGradient_ = () => {
     return (
       <LinearGradient
         colors={["#666666", "#000000"]}
@@ -14,7 +13,6 @@ export default class LinearGradient_ extends Component {
       >
       </LinearGradient>
     )
-  }
 }
 
 const styles = StyleSheet.create({
@@ -26,3 +24,5 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 })
+
+export default LinearGradient_;
