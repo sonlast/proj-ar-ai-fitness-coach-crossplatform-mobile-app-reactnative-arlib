@@ -11,6 +11,7 @@ const index = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [iconColor, setIconColor] = useState("#000");
+  const [textColor, setTextColor] = useState("#fff");
   const [borderColor, setBorderColor] = useState("#D9D9D9");
   const startRecording = async () => {
     try {
@@ -30,10 +31,12 @@ const index = () => {
       setRecording(recording);
       setIsRecording(true);
       setIconColor("#0f0");
+      setTextColor("#0f0");
       setBorderColor("#0f0");
 
       setTimeout(() => {
         setIconColor("#f00");
+        setTextColor("#f00");
         setBorderColor("#f00");
       }, 1000);
 
@@ -54,6 +57,7 @@ const index = () => {
       setRecording(null);
       setIsRecording(false);
       setIconColor("#000");
+      setTextColor("#fff");
       setBorderColor("#D9D9D9");
       console.log("Recording stopped");
     } catch (err) {
@@ -81,7 +85,7 @@ const index = () => {
           <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
         </Pressable>
         <View style={{ marginTop: 40 }}>
-          <Text style={styles.basicText}>
+          <Text style={[styles.basicText, {color: textColor}]}>
             {isRecording ? "TAP TO STOP" : "TAP TO SPEAK"}
           </Text>
         </View>

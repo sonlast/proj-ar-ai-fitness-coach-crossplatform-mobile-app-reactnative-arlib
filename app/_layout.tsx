@@ -6,11 +6,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { Appearance } from 'react-native';
 import 'react-native-reanimated';
-
 // import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { Fonts } from '@/constants/Fonts';
 
+const fontUsed = require('@/assets/fonts/mainFont.ttf');
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -20,14 +20,14 @@ export default function RootLayout() {
   const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
 
   const [fontsLoaded, fontsError] = useFonts({
-    [Fonts.mainFont]: require('../assets/fonts/mainFont.ttf'),
+    [Fonts.mainFont]: fontUsed,
   });
 
   useEffect(() => {
-    if (!fontsLoaded && !fontsError) {
+    if (fontsLoaded || fontsError) {
       SplashScreen.hideAsync();
     }
-  }, [!fontsLoaded, !fontsError]);
+  }, [fontsLoaded, fontsError]);
 
   if (!fontsLoaded && !fontsError) {
     return null;
