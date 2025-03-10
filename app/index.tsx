@@ -86,7 +86,7 @@ const index = () => {
           <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
         </Pressable>
         <View style={{ marginTop: 40 }}>
-          <Text style={[styles.basicText, { color: textColor }]}>
+          <Text style={[styles.miscText, { color: textColor }]}>
             {isRecording ? "TAP TO STOP" : "TAP TO SPEAK"}
           </Text>
         </View>
@@ -96,7 +96,7 @@ const index = () => {
           </Text>
         </View>
         <View style={{ marginTop: 40 }}>
-          <Text style={styles.basicText}>
+          <Text style={styles.miscText}>
             Search Manually
           </Text>
         </View>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginHorizontal: "auto"
   },
-  basicText: {
+  miscText: {
     color: 'white',
     fontSize: 18,
     fontFamily: Fonts.mainFont
