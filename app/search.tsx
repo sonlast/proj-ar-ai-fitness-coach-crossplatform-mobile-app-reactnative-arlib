@@ -69,7 +69,7 @@ const Workout = ({ title, workoutDesc }: workoutProps) => {
     <View style={styles.workout}>
       <Pressable
         onPress={() => console.log(`Workout ${title} clicked.`)}
-          >
+      >
         <View style={styles.horizontalContent}>
           <View style={styles.imageContainer}>
             <Image
@@ -137,7 +137,9 @@ const search = () => {
         />
         {searching !== '' && (
           <View style={{ marginBottom: 20 }}>
-            <Text style={styles.miscText}>Matched {filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+            {
+              <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+            }
           </View>
         )}
         <FlatList
