@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 
 const LinearGradient_ = () => {
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     height: '100%',
+    zIndex: 1,
   },
 })
 
