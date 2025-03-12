@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, SafeAreaView, Text, View } from 'react-native';
-import LinearGradient_ from '../components/LinearGradient_';
 import { Fonts } from '../constants/Fonts';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
+import LinearGradient_ from '../components/LinearGradient_';
+import BackgroundImage from '../components/BackgroundImage';
 
 const workouts = [
   {
@@ -110,45 +111,46 @@ const search = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient_ />
-      <View style={styles.content}>
-        <Text style={styles.appName}> AR FitCoach </Text>
-        <Input
-          placeholder='Search workout...'
-          placeholderTextColor="#fff"
-          value={searching}
-          onChangeText={updateSearch}
-          containerStyle={styles.containerStyle}
-          inputContainerStyle={styles.inputContainer}
-          inputStyle={styles.input}
-          rightIcon={
-            <Pressable
-              onPress={() => console.log('searching...')}
-              style={styles.searchIconContainer}>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                size={22}
-                color='#fff'
-              />
-            </Pressable>
-          }
-          autoFocus={true}
-          autoComplete='off'
-          cursorColor={'#fff'}
-        />
-        {searching !== '' && (
-          <View style={{ marginBottom: 20 }}>
-            {
-              <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+      <BackgroundImage />
+        <View style={styles.content}>
+          <Text style={styles.appName}> AR FitCoach </Text>
+          <Input
+            placeholder='Search workout...'
+            placeholderTextColor="#fff"
+            value={searching}
+            onChangeText={updateSearch}
+            containerStyle={styles.containerStyle}
+            inputContainerStyle={styles.inputContainer}
+            inputStyle={styles.input}
+            rightIcon={
+              <Pressable
+                onPress={() => console.log('searching...')}
+                style={styles.searchIconContainer}>
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  size={22}
+                  color='#fff'
+                />
+              </Pressable>
             }
-          </View>
-        )}
-        <FlatList
-          data={filterWorkouts}
-          renderItem={({ item }) => <Workout title={item.title} workoutDesc={item.workoutDesc} />}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+            autoFocus={true}
+            autoComplete='off'
+            cursorColor={'#fff'}
+          />
+          {searching !== '' && (
+            <View style={{ marginBottom: 20 }}>
+              {
+                <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+              }
+            </View>
+          )}
+          <FlatList
+            data={filterWorkouts}
+            renderItem={({ item }) => <Workout title={item.title} workoutDesc={item.workoutDesc} />}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
     </SafeAreaView>
   )
 }
@@ -161,6 +163,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 40,
     marginHorizontal: '7%',
+    zIndex: 3,
   },
   appName: {
     color: 'white',
