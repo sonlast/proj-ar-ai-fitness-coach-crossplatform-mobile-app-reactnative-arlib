@@ -5,6 +5,7 @@ import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-ico
 import { Audio } from 'expo-av';
 import { Link } from 'expo-router';
 import LinearGradient_ from '../components/LinearGradient_';
+import BackgroundImage from '../components/BackgroundImage';
 
 import { Fonts } from '../constants/Fonts';
 
@@ -80,6 +81,7 @@ const index = () => {
   return (
     <View style={styles.container}>
       <LinearGradient_ />
+      <BackgroundImage />
       <View style={styles.container}>
         <Text style={styles.appName}> AR FitCoach </Text>
         <Pressable onPress={isRecording ? stopRecording : startRecording} style={[styles.speakButton, { borderWidth: 3, borderColor: borderColor }]}>
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 3,
   },
   appName: {
     color: 'white',
