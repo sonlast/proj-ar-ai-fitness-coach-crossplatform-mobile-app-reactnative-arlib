@@ -78,6 +78,8 @@ const index = () => {
   }, []);
 
   // console.log(`REVAI API KEY: ${process.env.EXPO_PUBLIC_REVAI_API}`)
+  // console.log(`SUPABASE URL: ${process.env.EXPO_PUBLIC_SUPABASE_URL}`)
+  // console.log(`SUPABASE KEY: ${process.env.EXPO_PUBLIC_SUPABASE_KEY}`)
   return (
     <View style={styles.container}>
       <LinearGradient_ />
