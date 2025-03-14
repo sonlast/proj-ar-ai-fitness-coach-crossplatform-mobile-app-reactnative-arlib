@@ -6,6 +6,7 @@ import { Audio } from 'expo-av';
 import { Link } from 'expo-router';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
+import { supabase } from '../utils/supabase';
 
 import { Fonts } from '../constants/Fonts';
 
