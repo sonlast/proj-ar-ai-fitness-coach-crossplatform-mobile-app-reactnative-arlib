@@ -1,10 +1,16 @@
 import 'react-native-url-polyfill/auto';
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { createClient } from '@supabase/supabase-js'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL as string
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_KEY as string
+// Ensure environment variables are defined
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_KEY;
 
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Supabase URL and Anon Key must be provided in environment variables');
+}
+
+// Initialize Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: AsyncStorage,
@@ -12,4 +18,4 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     detectSessionInUrl: false,
   },
-})
+});
