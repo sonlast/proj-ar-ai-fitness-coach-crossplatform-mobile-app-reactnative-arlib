@@ -19,3 +19,85 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: false,
   },
 });
+
+// export const fetchData = async (table: string, columns: string = '*') => {
+//   const { data, error } = await supabase
+//     .from(table)
+//     .select(columns);
+
+//   if (error) throw new Error(error.message);
+//   return data;
+// };
+export const fetchData = async (bucketName: string) => {
+  try {
+    const { data, error } = await supabase.storage.from(bucketName).list();
+
+    if (error) throw error;
+
+    console.log("Fetched files:", data);
+    return data;
+  } catch (err) {
+    console.error("Error fetching files:", err);
+    return [];
+  }
+};
+
+
+// Insert data into Supabase
+export const insertData = async (table: string, payload: object) => {
+  const { data, error } = await supabase
+    .from(table)
+    .insert(payload);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+// Update data in Supabase
+export const updateData = async (table: string, payload: object, filter: object) => {
+  const { data, error } = await supabase
+    .from(table)
+    .update(payload)
+    .match(filter);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+// Delete data from Supabase
+export const deleteData = async (table: string, filter: object) => {
+  const { data, error } = await supabase
+    .from(table)
+    .delete()
+    .match(filter);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+// Upload file to Supabase Storage
+// export const uploadFile = async (bucket: string, path: string, file: Blob) => {
+//   const { data, error } = await supabase
+//     .storage
+//     .from(bucket)
+//     .upload(path, file);
+
+//   if (error) throw new Error(error.message);
+//   return data;
+// };
+export const uploadFile = async (bucketName: string, filePath: any, fileBlob: any) => {
+  try {
+    const { data, error } = await supabase.storage.from(bucketName).upload(filePath, fileBlob, {
+      contentType: "audio/*",
+      upsert: true, // Allows overwriting files if needed
+    });
+
+    if (error) {
+      throw error;
+    }
+    console.log("File uploaded successfully:", data);
+    return data;
+  } catch (err) {
+    console.error("Upload error:", err);
+  }
+};
