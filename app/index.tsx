@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Audio } from 'expo-av';
 import { Link } from 'expo-router';
+import * as FileSystem from 'expo-file-system';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import { supabase } from '../utils/supabase';
@@ -16,6 +17,8 @@ const index = () => {
   const [iconColor, setIconColor] = useState("#000");
   const [textColor, setTextColor] = useState("#fff");
   const [borderColor, setBorderColor] = useState("#D9D9D9");
+  // const [data, setData] = useState<any[]>([]);
+
   const startRecording = async () => {
     try {
       console.log("Starting recording...");
@@ -28,7 +31,30 @@ const index = () => {
       const recording = new Audio.Recording();
       await recording.prepareToRecordAsync({
         ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
-        isMeteringEnabled: true,
+        android: {
+          extension: '.m4a',
+          outputFormat: 2,
+          audioEncoder: 3,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+        },
+        ios: {
+          extension: '.m4a',
+          outputFormat: "aac ",
+          audioQuality: 127,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false,
+        },
+        web: {
+          mimeType: 'audio/webm',
+          bitsPerSecond: 128000,
+        },
+        // isMeteringEnabled: true,
       });
       await recording.startAsync();
       setRecording(recording);
@@ -56,7 +82,38 @@ const index = () => {
 
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
-      console.log("Recording stopped and stored at", uri);
+      // console.log("Recording stopped and stored at", uri);
+
+      if (!uri) {
+        throw new Error("Recording URI is null");
+      }
+
+      const fileInfo = await FileSystem.getInfoAsync(uri);
+      console.log(`File info: ${JSON.stringify(fileInfo)}`);
+
+      const base64Data = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64
+      });
+
+      // const fileContent = await FileSystem.readAsStringAsync(uri, {
+      //   encoding: FileSystem.EncodingType.Base64,
+      // });
+      // const response  = await fetch(uri);
+      // const fileBlob = await response.blob();      
+
+      const filePath = `recordings/${Date.now()}.m4a`;
+
+      const { data, error } = await supabase.storage
+        .from('ar-fitcoach')
+        .upload(filePath, base64Data, {
+          contentType: "audio/m4a",
+          upsert: true,
+        });
+
+      if (error) throw error;
+
+      console.log("Uploaded audio file:", data);
+
       setRecording(null);
       setIsRecording(false);
       setIconColor("#000");
@@ -77,6 +134,19 @@ const index = () => {
     }
     requestPermission();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchDataFromSupabase = async () => {
+  //     try {
+  //       const files = await fetchData("recordings"); // Use your actual bucket name
+  //       setData(files);
+  //     } catch (error) {
+  //       console.error("Error fetching files: ", error);
+  //     }
+  //   };
+
+  //   fetchDataFromSupabase();
+  // }, []); // Runs once when component mounts
 
   // console.log(`REVAI API KEY: ${process.env.EXPO_PUBLIC_REVAI_API}`)
   // console.log(`SUPABASE URL: ${process.env.EXPO_PUBLIC_SUPABASE_URL}`)
@@ -197,13 +267,13 @@ export default index;
 
 //       {isExpanded && (
 
-//         <TextInput 
+//         <TextInput
 
-//           style={styles.searchInput} 
+//           style={styles.searchInput}
 
-//           placeholder="Search..." 
+//           placeholder="Search..."
 
-//           onFocus={() => setIsExpanded(true)} 
+//           onFocus={() => setIsExpanded(true)}
 
 //         />
 
