@@ -1,4 +1,4 @@
-# Fitness Coach Cross Platform Mobile Application with AR / AI Integrations using React Native
+# Fitness Coach Cross Platform Mobile Application with Augmented Reality / AI Integrations using React Native
 
 <!-- ## Features
 
