@@ -88,24 +88,28 @@ const index = () => {
         throw new Error("Recording URI is null");
       }
 
-      const fileInfo = await FileSystem.getInfoAsync(uri);
-      console.log(`File info: ${JSON.stringify(fileInfo)}`);
-
-      const base64Data = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64
-      });
-
       // const fileContent = await FileSystem.readAsStringAsync(uri, {
       //   encoding: FileSystem.EncodingType.Base64,
       // });
       // const response  = await fetch(uri);
       // const fileBlob = await response.blob();      
 
+      // Read file as binary (Base64)
+      const fileData = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Convert Base64 to a valid format for Supabase Storage
+      const fileBlob = new Uint8Array(
+        atob(fileData).split("").map((char) => char.charCodeAt(0))
+      );
+
+
       const filePath = `recordings/${Date.now()}.m4a`;
 
       const { data, error } = await supabase.storage
         .from('ar-fitcoach')
-        .upload(filePath, base64Data, {
+        .upload(filePath, fileBlob, {
           contentType: "audio/m4a",
           upsert: true,
         });
