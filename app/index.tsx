@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Audio } from 'expo-av';
 import { Link } from 'expo-router';
-import * as FileSystem from 'expo-file-system';
+// import * as FileSystem from 'expo-file-system';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
-import { supabase } from '../utils/supabase';
+// import { uploadFile } from '../utils/supabase';
 
 import { Fonts } from '../constants/Fonts';
 
@@ -88,29 +88,20 @@ const index = () => {
         throw new Error("Recording URI is null");
       }
 
-      //! Read file as binary (Base64)
-      const fileData = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
+      // //! Read file as binary (Base64)
+      // const fileData = await FileSystem.readAsStringAsync(uri, {
+      //   encoding: FileSystem.EncodingType.Base64,
+      // });
 
-      //! Convert Base64 to a valid format for Supabase Storage
-      const fileBlob = new Uint8Array(
-        atob(fileData).split("").map((char) => char.charCodeAt(0))
-      );
+      // //! Convert Base64 to a valid format for Supabase Storage
+      // const fileBlob = new Uint8Array(
+      //   atob(fileData).split("").map((char) => char.charCodeAt(0))
+      // );
 
 
-      const filePath = `recordings/${Date.now()}.m4a`;
+      // const filePath = `recordings/${Date.now()}.m4a`;
 
-      const { data, error } = await supabase.storage
-        .from('ar-fitcoach')
-        .upload(filePath, fileBlob, {
-          contentType: "audio/m4a",
-          upsert: true,
-        });
-
-      if (error) throw error;
-
-      // console.log("Uploaded audio file:", data);
+      // uploadFile(filePath, fileBlob);
 
       setRecording(null);
       setIsRecording(false);

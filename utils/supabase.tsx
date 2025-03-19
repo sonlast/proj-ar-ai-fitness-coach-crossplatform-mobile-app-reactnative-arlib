@@ -75,22 +75,15 @@ export const deleteData = async (table: string, filter: object) => {
   return data;
 };
 
-// Upload file to Supabase Storage
-// export const uploadFile = async (bucket: string, path: string, file: Blob) => {
-//   const { data, error } = await supabase
-//     .storage
-//     .from(bucket)
-//     .upload(path, file);
-
-//   if (error) throw new Error(error.message);
-//   return data;
-// };
-export const uploadFile = async (bucketName: string, filePath: any, fileBlob: any) => {
+export const uploadFile = async (filePath: any, fileBlob: any) => {
   try {
-    const { data, error } = await supabase.storage.from(bucketName).upload(filePath, fileBlob, {
-      contentType: "audio/*",
-      upsert: true, // Allows overwriting files if needed
-    });
+    // Uploading audio recording in supabase
+    const { data, error } = await supabase.storage
+      .from('ar-fitcoach')
+      .upload(filePath, fileBlob, {
+        contentType: "audio/m4a",
+        upsert: true, // Allows overwriting files if needed
+      });
 
     if (error) {
       throw error;
