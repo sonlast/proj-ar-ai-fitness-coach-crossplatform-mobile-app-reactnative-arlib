@@ -21,7 +21,7 @@ const index = () => {
 
   const startRecording = async () => {
     try {
-      console.log("Starting recording...");
+      // console.log("Starting recording...");
       const { granted } = await Audio.requestPermissionsAsync();
       if (!granted) {
         Alert.alert('Permission to access microphone was denied');
@@ -69,7 +69,7 @@ const index = () => {
         setBorderColor("#f00");
       }, 1000);
 
-      console.log("Recording started");
+      // console.log("Recording started");
     } catch (err) {
       console.error('Failed to start recording', err);
     }
@@ -77,7 +77,7 @@ const index = () => {
 
   const stopRecording = async () => {
     try {
-      console.log("Stopping recording...");
+      // console.log("Stopping recording...");
       if (!recording) return;
 
       await recording.stopAndUnloadAsync();
@@ -88,18 +88,12 @@ const index = () => {
         throw new Error("Recording URI is null");
       }
 
-      // const fileContent = await FileSystem.readAsStringAsync(uri, {
-      //   encoding: FileSystem.EncodingType.Base64,
-      // });
-      // const response  = await fetch(uri);
-      // const fileBlob = await response.blob();      
-
-      // Read file as binary (Base64)
+      //! Read file as binary (Base64)
       const fileData = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      // Convert Base64 to a valid format for Supabase Storage
+      //! Convert Base64 to a valid format for Supabase Storage
       const fileBlob = new Uint8Array(
         atob(fileData).split("").map((char) => char.charCodeAt(0))
       );
@@ -116,14 +110,14 @@ const index = () => {
 
       if (error) throw error;
 
-      console.log("Uploaded audio file:", data);
+      // console.log("Uploaded audio file:", data);
 
       setRecording(null);
       setIsRecording(false);
       setIconColor("#000");
       setTextColor("#fff");
       setBorderColor("#D9D9D9");
-      console.log("Recording stopped");
+      // console.log("Recording stopped");
     } catch (err) {
       console.error('Failed to stop recording', err);
     }
@@ -138,19 +132,6 @@ const index = () => {
     }
     requestPermission();
   }, []);
-
-  // useEffect(() => {
-  //   const fetchDataFromSupabase = async () => {
-  //     try {
-  //       const files = await fetchData("recordings"); // Use your actual bucket name
-  //       setData(files);
-  //     } catch (error) {
-  //       console.error("Error fetching files: ", error);
-  //     }
-  //   };
-
-  //   fetchDataFromSupabase();
-  // }, []); // Runs once when component mounts
 
   // console.log(`REVAI API KEY: ${process.env.EXPO_PUBLIC_REVAI_API}`)
   // console.log(`SUPABASE URL: ${process.env.EXPO_PUBLIC_SUPABASE_URL}`)
@@ -234,79 +215,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontFamily: Fonts.mainFont
-  }
+  },
 })
 
 export default index;
 
-// import React, { useState } from 'react';
-
-// import { View, TextInput, StyleSheet } from 'react-native';
-
-
-
-// const ExpandableSearchBar = () => {
-
-//   const [isExpanded, setIsExpanded] = useState(false);
-
-
-
-//   const handleIconPress = () => {
-
-//     setIsExpanded(!isExpanded);
-
-//   };
-
-
-
-//   return (
-
-//     <View style={styles.container}>
-
-//       <TouchableOpacity onPress={handleIconPress}>
-
-//         {/* Render your search icon here */}
-
-//       </TouchableOpacity>
-
-//       {isExpanded && (
-
-//         <TextInput
-
-//           style={styles.searchInput}
-
-//           placeholder="Search..."
-
-//           onFocus={() => setIsExpanded(true)}
-
-//         />
-
-//       )}
-
-//     </View>
-
-//   );
-
-// };
-
-
-
-// const styles = StyleSheet.create({
-
-//   container: {
-
-//     // ... Container styling
-
-//   },
-
-//   searchInput: {
-
-//     // ... Expanded search bar styling
-
-//   },
-
-// });
-
-
-
-// export default ExpandableSearchBar;
