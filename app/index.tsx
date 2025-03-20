@@ -75,6 +75,32 @@ const index = () => {
     }
   };
 
+  // const uploadAudioForTranscription = async (audioUri: string) => {
+  //   const formData = new FormData();
+  //   formData.append('audio', {
+  //     uri: audioUri,
+  //     name: 'audio.m4a',
+  //     type: 'audio/m4a',
+  //   } as any);
+  
+  //   try {
+  //     const response = await fetch('http://192.168.55.100:3000/transcribe', {
+  //       method: 'POST',
+  //       body: formData,
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     });
+  
+  //     const data = await response.json();
+  //     console.log('Transcription:', data.transcript);
+  //     Alert.alert('Transcription Result', data.transcript);
+  //   } catch (error) {
+  //     console.error('Error uploading audio:', error);
+  //     Alert.alert('Error', 'Failed to transcribe audio');
+  //   }
+  // };
+
   const stopRecording = async () => {
     try {
       // console.log("Stopping recording...");
@@ -108,6 +134,8 @@ const index = () => {
       setIconColor("#000");
       setTextColor("#fff");
       setBorderColor("#D9D9D9");
+
+      // await uploadAudioForTranscription(uri);
       // console.log("Recording stopped");
     } catch (err) {
       console.error('Failed to stop recording', err);
