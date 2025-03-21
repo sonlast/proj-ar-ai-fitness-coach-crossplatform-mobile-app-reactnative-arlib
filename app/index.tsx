@@ -82,7 +82,7 @@ const index = () => {
   //     name: 'audio.m4a',
   //     type: 'audio/m4a',
   //   } as any);
-  
+
   //   try {
   //     const response = await fetch('http://192.168.55.100:3000/transcribe', {
   //       method: 'POST',
@@ -91,7 +91,7 @@ const index = () => {
   //         'Content-Type': 'multipart/form-data',
   //       },
   //     });
-  
+
   //     const data = await response.json();
   //     console.log('Transcription:', data.transcript);
   //     Alert.alert('Transcription Result', data.transcript);
@@ -134,6 +134,18 @@ const index = () => {
       setIconColor("#000");
       setTextColor("#fff");
       setBorderColor("#D9D9D9");
+
+      const response = await fetch('http://192.168.55.100:3000/transcribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ filePath }),
+      });
+  
+      const data = await response.json();
+      console.log('Transcription:', data.transcription);
+      Alert.alert('Transcription Result', data.transcription);
 
       // await uploadAudioForTranscription(uri);
       // console.log("Recording stopped");
