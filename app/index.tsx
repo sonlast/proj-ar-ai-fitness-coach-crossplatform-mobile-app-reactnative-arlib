@@ -135,7 +135,7 @@ const index = () => {
       setTextColor("#fff");
       setBorderColor("#D9D9D9");
 
-      const response = await fetch('http://192.168.55.100:3000/transcribe', {
+      const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
