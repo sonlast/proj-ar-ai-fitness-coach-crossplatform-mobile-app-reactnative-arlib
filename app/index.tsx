@@ -21,8 +21,9 @@ const index = () => {
   // const [data, setData] = useState<any[]>([]);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://192.168.55.100:8080');
-  
+    // const ws = new WebSocket('ws://192.168.55.100:8080');
+    const ws = new WebSocket('https://ar-fitcoach.onrender.com');
+    
     ws.onopen = () => console.log('WebSocket connection established');
   
     ws.onmessage = (event) => {
@@ -164,8 +165,8 @@ const index = () => {
       setTextColor("#fff");
       setBorderColor("#D9D9D9");
 
-      // const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
-      const response = await fetch('http://192.168.55.100:3000/transcribe', {
+      const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
+      // const response = await fetch('http://192.168.55.100:3000/transcribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
