@@ -17,10 +17,39 @@ const index = () => {
   const [iconColor, setIconColor] = useState("#000");
   const [textColor, setTextColor] = useState("#fff");
   const [borderColor, setBorderColor] = useState("#D9D9D9");
+  const [transcription, setTranscription] = useState('');
   // const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const ws = new WebSocket('ws://192.168.55.100:8080');
+  
+    ws.onopen = () => console.log('WebSocket connection established');
+  
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'transcription') {
+        if (message.data === "End of Transcript") {
+          console.log("Transcript completed.");
+        } else if (message.data && !message.data.includes("Partial Transcript")) {
+          // Only update the transcription state for the final transcript
+          setTranscription(message.data);
+        } else {
+          // Log partial transcripts for debugging purposes
+          console.log('Partial Transcript:', message.data);
+        }
+      }
+      console.log('Received message:', message);
+    };
+  
+    ws.onerror = (error) => console.error('WebSocket error:', error);
+    ws.onclose = () => console.log('WebSocket connection closed');
+  
+    return () => ws.close();
+  }, []); // Ensure it only runs once
 
   const startRecording = async () => {
     try {
+      setTranscription('');
       // console.log("Starting recording...");
       const { granted } = await Audio.requestPermissionsAsync();
       if (!granted) {
@@ -135,14 +164,15 @@ const index = () => {
       setTextColor("#fff");
       setBorderColor("#D9D9D9");
 
-      const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
+      // const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
+      const response = await fetch('http://192.168.55.100:3000/transcribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ filePath }),
       });
-  
+
       const data = await response.json();
       console.log('Transcription:', data.transcription);
       Alert.alert('Transcription Result', data.transcription);
@@ -196,6 +226,11 @@ const index = () => {
             <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={{ color: "#fff" }} />
           </Pressable>
         </Link>
+        <View style={{ marginTop: 40 }}>
+          <Text style={styles.miscText}>
+            Transcription: {transcription}
+          </Text>
+        </View>
       </View>
     </View>
   )
