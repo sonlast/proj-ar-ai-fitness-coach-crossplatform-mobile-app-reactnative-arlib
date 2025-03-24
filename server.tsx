@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { createServer } from 'http';
 // import axios from 'axios';
 import { createClient } from '@supabase/supabase-js';
 // import FormData from 'form-data';
@@ -14,6 +15,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 dotenv.config();
 
 const app = express();
+const server = createServer(app);
 const port = 3000;
 
 app.use(bodyParser.json());
@@ -32,7 +34,7 @@ if (!SPEECHMATICS_API_KEY) {
   throw new Error('Speechmatics API key is missing');
 }
 
-const wss = new WebSocketServer({ port: 8080 });
+const wss = new WebSocketServer({ server });
 
 const clients = new Set();
 
