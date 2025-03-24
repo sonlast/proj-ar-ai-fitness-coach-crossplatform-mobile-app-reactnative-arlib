@@ -22,7 +22,7 @@ const index = () => {
 
   useEffect(() => {
     // const ws = new WebSocket('ws://192.168.55.100:8080');
-    const ws = new WebSocket('ws://ar-fitcoach.onrender.com');
+    const ws = new WebSocket('wss://ar-fitcoach.onrender.com');
     
     ws.onopen = () => console.log('WebSocket connection established');
   
