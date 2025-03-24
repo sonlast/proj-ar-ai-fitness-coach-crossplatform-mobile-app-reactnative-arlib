@@ -1,3 +1,34 @@
+//TODO: TRANSFER DATA TO SEARCH.TSX
+//! CHANGES IN index.tsx
+// import { Link, useNavigation, useRouter } from 'expo-router';
+
+  // const navigation = useNavigation();
+  // const router = useRouter();
+
+            // router.push({
+          //   pathname: '/search',
+          //   params: { transcription },
+          // });
+
+  // }, [transcription, router]); // Ensure it only runs once
+
+          {/* <Link href="/search" asChild> */}
+
+            {/* </Link> */}
+  
+//! CHANGES IN search.tsx
+// import { useLocalSearchParams } from 'expo-router';
+
+  // const params: any = useLocalSearchParams(); 
+
+  
+    // useEffect(() => {
+    //   if (params.transcription) {
+    //     setSearching(params.transcription);
+    //   }
+    // }, [params.transcription])
+
+
 //TODO: FETCHING DATA FROM SUPABASE
 // useEffect(() => {
   //   const fetchDataFromSupabase = async () => {
