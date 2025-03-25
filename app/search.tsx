@@ -4,6 +4,7 @@ import { Fonts } from '../constants/Fonts';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
+import { useLocalSearchParams } from 'expo-router';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 
@@ -95,10 +96,17 @@ const Workout = ({ title, workoutDesc }: workoutProps) => {
 const search = () => {
   const [searching, setSearching] = useState('');
   const [filterWorkouts, setFilterWorkouts] = useState(workouts);
+  const { transcription } = useLocalSearchParams();
 
   const updateSearch = (searching: any) => {
     setSearching(searching);
   }
+
+  useEffect(() => {
+    if (transcription) {
+      setSearching(transcription as string);
+    }
+  }, [transcription]);
 
   useEffect(() => {
     setFilterWorkouts(
