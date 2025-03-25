@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Audio } from 'expo-av';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
+import Loading from '../components/Loading';
 import { uploadFile } from '../utils/supabase';
 
 import { Fonts } from '../constants/Fonts';
@@ -18,14 +19,16 @@ const index = () => {
   const [textColor, setTextColor] = useState("#fff");
   const [borderColor, setBorderColor] = useState("#D9D9D9");
   const [transcription, setTranscription] = useState('');
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const router = useRouter();
   // const [data, setData] = useState<any[]>([]);
 
   useEffect(() => {
     // const ws = new WebSocket('ws://192.168.55.100:8080');
     const ws = new WebSocket('wss://ar-fitcoach.onrender.com');
-    
+
     ws.onopen = () => console.log('WebSocket connection established');
-  
+
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === 'transcription') {
@@ -33,7 +36,16 @@ const index = () => {
           console.log("Transcript completed.");
         } else if (message.data && !message.data.includes("Partial Transcript")) {
           // Only update the transcription state for the final transcript
-          setTranscription(message.data);
+          const cleanTranscription = message.data
+            .replace(/[.,;!?]+$/, '')
+            .trim();
+
+          setTranscription(cleanTranscription);
+          setIsTranscribing(false);
+          router.push({
+            pathname: '/search',
+            params: { transcription: cleanTranscription }
+          });
         } else {
           // Log partial transcripts for debugging purposes
           console.log('Partial Transcript:', message.data);
@@ -41,16 +53,18 @@ const index = () => {
       }
       console.log('Received message:', message);
     };
-  
+
     ws.onerror = (error) => console.error('WebSocket error:', error);
-    ws.onclose = () => console.log('WebSocket connection closed');
-  
+    ws.onclose = () => {
+      console.log('WebSocket connection closed');
+      setIsTranscribing(false);
+    }
+
     return () => ws.close();
   }, []); // Ensure it only runs once
 
   const startRecording = async () => {
     try {
-      setTranscription('');
       // console.log("Starting recording...");
       const { granted } = await Audio.requestPermissionsAsync();
       if (!granted) {
@@ -136,6 +150,7 @@ const index = () => {
       // console.log("Stopping recording...");
       if (!recording) return;
 
+      setIsTranscribing(true);
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
       // console.log("Recording stopped and stored at", uri);
@@ -166,7 +181,7 @@ const index = () => {
       setBorderColor("#D9D9D9");
 
       const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
-      // const response = await fetch('http://192.168.55.100:3000/transcribe', {
+        // const response = await fetch('http://192.168.55.100:3000/transcribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -176,12 +191,12 @@ const index = () => {
 
       const data = await response.json();
       console.log('Transcription:', data.transcription);
-      Alert.alert('Transcription Result', data.transcription);
 
       // await uploadAudioForTranscription(uri);
       // console.log("Recording stopped");
     } catch (err) {
       console.error('Failed to stop recording', err);
+      setIsTranscribing(false); 
     }
   };
 
@@ -205,7 +220,11 @@ const index = () => {
       <View style={styles.container}>
         <Text style={styles.appName}> AR FitCoach </Text>
         <Pressable onPress={isRecording ? stopRecording : startRecording} style={[styles.speakButton, { borderWidth: 3, borderColor: borderColor }]}>
-          <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
+          {isTranscribing ? (
+            <Loading />
+          ) : (
+            <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
+          )}
         </Pressable>
         <View style={{ marginTop: 40 }}>
           <Text style={[styles.miscText, { color: textColor }]}>
@@ -227,11 +246,11 @@ const index = () => {
             <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={{ color: "#fff" }} />
           </Pressable>
         </Link>
-        <View style={{ marginTop: 40 }}>
+        {/* <View style={{ marginTop: 40 }}>
           <Text style={styles.miscText}>
             Transcription: {transcription}
           </Text>
-        </View>
+        </View> */}
       </View>
     </View>
   )
