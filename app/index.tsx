@@ -5,6 +5,7 @@ import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-ico
 import { Audio } from 'expo-av';
 import { Link, useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
+import LottieView from 'lottie-react-native';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import Loading from '../components/Loading';
@@ -151,6 +152,9 @@ const index = () => {
       if (!recording) return;
 
       setIsTranscribing(true);
+      setIconColor("#000");
+      setTextColor("#fff");
+      setBorderColor("#D9D9D9");
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
       // console.log("Recording stopped and stored at", uri);
@@ -176,9 +180,6 @@ const index = () => {
 
       setRecording(null);
       setIsRecording(false);
-      setIconColor("#000");
-      setTextColor("#fff");
-      setBorderColor("#D9D9D9");
 
       const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
         // const response = await fetch('http://192.168.55.100:3000/transcribe', {
@@ -196,7 +197,7 @@ const index = () => {
       // console.log("Recording stopped");
     } catch (err) {
       console.error('Failed to stop recording', err);
-      setIsTranscribing(false); 
+      setIsTranscribing(false);
     }
   };
 
@@ -221,7 +222,13 @@ const index = () => {
         <Text style={styles.appName}> AR FitCoach </Text>
         <Pressable onPress={isRecording ? stopRecording : startRecording} style={[styles.speakButton, { borderWidth: 3, borderColor: borderColor }]}>
           {isTranscribing ? (
-            <Loading />
+            /* // <Loading /> */
+            <LottieView
+              source={require('../assets/anims/loader_droplets.json')}
+              autoPlay
+              loop
+              style={styles.loader}
+            />
           ) : (
             <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
           )}
@@ -302,6 +309,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.mainFont
   },
+  loader: {
+    width: 140,
+    height: 140,
+    marginTop: 40,
+    marginBottom: 40,
+    alignSelf: "center"
+  }
 })
 
 export default index;
