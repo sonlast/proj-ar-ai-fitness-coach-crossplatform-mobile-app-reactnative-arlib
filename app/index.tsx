@@ -5,7 +5,6 @@ import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-ico
 import { Audio } from 'expo-av';
 import { Link, useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
-import LottieView from 'lottie-react-native';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import Loading from '../components/Loading';
@@ -222,13 +221,7 @@ const index = () => {
         <Text style={styles.appName}> AR FitCoach </Text>
         <Pressable onPress={isRecording ? stopRecording : startRecording} style={[styles.speakButton, { borderWidth: 3, borderColor: borderColor }]}>
           {isTranscribing ? (
-            /* // <Loading /> */
-            <LottieView
-              source={require('../assets/anims/loader_droplets.json')}
-              autoPlay
-              loop
-              style={styles.loader}
-            />
+            <Loading />
           ) : (
             <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
           )}
@@ -308,13 +301,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontFamily: Fonts.mainFont
-  },
-  loader: {
-    width: 140,
-    height: 140,
-    marginTop: 40,
-    marginBottom: 40,
-    alignSelf: "center"
   }
 })
 
