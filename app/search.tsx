@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, SafeAreaView, Text, View } from 'react-native';
 import { Fonts } from '../constants/Fonts';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faClockRotateLeft, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const workouts = [
   {
@@ -96,69 +97,171 @@ const Workout = ({ title, workoutDesc }: workoutProps) => {
 const search = () => {
   const [searching, setSearching] = useState('');
   const [filterWorkouts, setFilterWorkouts] = useState(workouts);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [showRecent, setShowRecent] = useState(false);
   const { transcription } = useLocalSearchParams();
+
+  useEffect(() => {
+    const loadRecentSearches = async () => {
+      try {
+        const savedSearches = await AsyncStorage.getItem('recentSearches');
+        if (savedSearches) {
+          setRecentSearches(JSON.parse(savedSearches));
+        }
+      } catch (error) {
+        console.error('Error loading recent searches:', error);
+      }
+    };
+
+    loadRecentSearches();
+  }, []);
 
   const updateSearch = (searching: any) => {
     setSearching(searching);
+    setShowRecent(searching === '');
   }
+
+  const addToRecentSearches = async (searchTerm: string) => {
+    if (!searchTerm.trim()) return;
+
+    try {
+      const updatedSearches = [
+        searchTerm,
+        ...recentSearches.filter(item => item.toLowerCase() !== searchTerm.toLowerCase())
+      ].slice(0, 5); // Keep only 5 most recent items
+
+      setRecentSearches(updatedSearches);
+      await AsyncStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    } catch (error) {
+      console.error('Error saving recent searches:', error);
+    }
+  };
 
   useEffect(() => {
     if (transcription) {
-      setSearching(transcription as string);
+      const cleanTranscription = transcription as string;
+      setSearching(cleanTranscription);
+      addToRecentSearches(cleanTranscription);
+      setShowRecent(false);
     }
   }, [transcription]);
 
   useEffect(() => {
-    setFilterWorkouts(
-      workouts.filter(workout =>
-        workout.title.toLowerCase().includes(searching.toLowerCase())
-      )
-    );
+    if (searching) {
+      setFilterWorkouts(
+        workouts.filter(workout =>
+          workout.title.toLowerCase().includes(searching.toLowerCase())
+        )
+      );
+      setShowRecent(false);
+    } else {
+      setFilterWorkouts(workouts);
+    }
   }, [searching]);
+
+  const handleRecentSearchPress = (searchTerm: string) => {
+    setSearching(searchTerm);
+    addToRecentSearches(searchTerm);
+    setShowRecent(false);
+  };
+
+  const clearRecentSearches = async () => {
+    try {
+      await AsyncStorage.removeItem('recentSearches');
+      setRecentSearches([]);
+    } catch (error) {
+      console.error('Error clearing recent searches:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient_ />
       <BackgroundImage />
-        <View style={styles.content}>
-          <Text style={styles.appName}> AR FitCoach </Text>
-          <Input
-            placeholder='Search workout...'
-            placeholderTextColor="#fff"
-            value={searching}
-            onChangeText={updateSearch}
-            containerStyle={styles.containerStyle}
-            inputContainerStyle={styles.inputContainer}
-            inputStyle={styles.input}
-            rightIcon={
+      <View style={styles.content}>
+        <Text style={styles.appName}> AR FitCoach </Text>
+        <Input
+          placeholder='Search workout...'
+          placeholderTextColor="#fff"
+          value={searching}
+          onChangeText={updateSearch}
+          onFocus={() => searching === '' && setShowRecent(true)}
+          containerStyle={styles.containerStyle}
+          inputContainerStyle={styles.inputContainer}
+          inputStyle={styles.input}
+          rightIcon={
+            searching ? (
               <Pressable
-                onPress={() => console.log('searching...')}
-                style={styles.searchIconContainer}>
+                onPress={() => {
+                  setSearching('');
+                  setShowRecent(true);
+                }}
+                style={styles.searchIconContainer}
+                hitSlop={{
+                  top: 5,
+                  right: 5,
+                  bottom: 5,
+                  left: 5,
+                }}
+              >
                 <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  size={22}
+                  icon={faXmark}
+                  size={20}
                   color='#fff'
                 />
               </Pressable>
-            }
-            autoFocus={true}
-            autoComplete='off'
-            cursorColor={'#fff'}
-          />
-          {searching !== '' && (
-            <View style={{ marginBottom: 20 }}>
-              {
-                <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
-              }
+            ) : (
+              <View
+                style={styles.searchIconContainer}
+              >
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  color="#fff"
+                  size={20}
+                />
+              </View>
+            )
+          }
+          autoFocus={false}
+          autoComplete='off'
+          cursorColor={'#fff'}
+        />
+        {showRecent && recentSearches.length > 0 && (
+          <View style={styles.recentSearchesContainer}>
+            <View style={styles.recentHeader}>
+              <FontAwesomeIcon icon={faClockRotateLeft} color="#fff" size={16} />
+              <Text style={styles.recentTitle}>Recent Searches</Text>
+              <Pressable onPress={clearRecentSearches} style={styles.clearButton}>
+                <Text style={styles.clearText}>CLEAR</Text>
+              </Pressable>
             </View>
-          )}
-          <FlatList
-            data={filterWorkouts}
-            renderItem={({ item }) => <Workout title={item.title} workoutDesc={item.workoutDesc} />}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+            {recentSearches.map((searchTerm, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleRecentSearchPress(searchTerm)}
+                style={styles.recentItem}
+              >
+                <Text style={styles.recentText}>
+                  {searchTerm}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
+        <FlatList
+          data={filterWorkouts}
+          renderItem={({ item }) => <Workout title={item.title} workoutDesc={item.workoutDesc} />}
+          keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            searching !== '' ? (
+              <View style={{ marginBottom: 20 }}>
+                <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+              </View>
+            ) : null
+          }
+        />
+      </View>
     </SafeAreaView>
   )
 }
@@ -166,6 +269,7 @@ const search = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 3,
   },
   content: {
     flex: 1,
@@ -180,7 +284,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   containerStyle: {
-    marginVertical: 10,
+    marginTop: 10,
     backgroundColor: 'transparent',
     borderBottomWidth: 0,
     borderTopWidth: 0,
@@ -254,6 +358,52 @@ const styles = StyleSheet.create({
   miscText: {
     color: '#fff',
     fontSize: 16,
+    fontFamily: Fonts.mainFont,
+  },
+  recentSearchesContainer: {
+    position: 'absolute',
+    top: 90, // Adjust this value based on your header height
+    left: '3%',
+    right: '3%',
+    backgroundColor: '#666',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    padding: 10,
+    zIndex: 10, // Higher than FlatList
+    elevation: 10, // For Android shadow
+    shadowColor: '#000', // For iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  recentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  recentTitle: {
+    color: '#fff',
+    fontSize: 14,
+    fontFamily: Fonts.mainFont,
+    marginLeft: 8,
+    flex: 1,
+  },
+  clearButton: {
+    padding: 5,
+  },
+  clearText: {
+    color: '#fff',
+    fontSize: 13,
+    fontFamily: Fonts.mainFont,
+  },
+  recentItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 5,
+  },
+  recentText: {
+    color: '#fff',
+    fontSize: 14,
     fontFamily: Fonts.mainFont,
   },
 })
