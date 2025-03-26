@@ -8,7 +8,7 @@ import * as FileSystem from 'expo-file-system';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import Loading from '../components/Loading';
-import { uploadFile } from '../utils/supabase';
+import { uploadAudio } from '../utils/supabase';
 
 import { Fonts } from '../constants/Fonts';
 
@@ -175,7 +175,7 @@ const index = () => {
 
       const filePath = `recordings/${Date.now()}.m4a`;
 
-      await uploadFile(filePath, fileBlob)
+      await uploadAudio(filePath, fileBlob)
 
       setRecording(null);
       setIsRecording(false);
