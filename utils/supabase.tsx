@@ -95,22 +95,3 @@ export const uploadAudio = async (filePath: any, fileBlob: any) => {
     console.error("Upload error:", err);
   }
 };
-
-// export const uploadTranscription = async (filePath: string, content: string) => {
-//   try {
-//     const { data, error } = await supabase.storage 
-//       .from('ar-fitcoach')
-//       .upload(`transcriptions/${filePath}`, content, {
-//         contentType: 'text/plain',
-//         upsert: true, // Allows overwriting files if needed
-//       });
-
-//       if (error) {
-//         throw error;
-//       }
-//       console.log("Transcription uploaded successfully:", data); 
-//       return data;
-//   } catch (err) {
-//     console.error("Transcription upload error:", err);
-//   }
-// }
