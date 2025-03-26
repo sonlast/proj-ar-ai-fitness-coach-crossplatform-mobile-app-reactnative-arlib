@@ -1,32 +1,26 @@
-//TODO: TRANSFER DATA TO SEARCH.TSX
-//! CHANGES IN index.tsx
-// import { Link, useNavigation, useRouter } from 'expo-router';
+//TODO: ADDING SKELETON EFFECTS
+// import Skeleton from '../components/Skeleton';
+// import { Skeleton } from '@rneui/base';
 
-  // const navigation = useNavigation();
-  // const router = useRouter();
+// const [isLoading, setIsLoading] = useState(true);
 
-            // router.push({
-          //   pathname: '/search',
-          //   params: { transcription },
-          // });
+// setIsLoading(true);
 
-  // }, [transcription, router]); // Ensure it only runs once
+// useEffect(() => {
+//   // Simulate API call or data processing
+//   const timer = setTimeout(() => {
+//     setFilterWorkouts(
+//       workouts.filter(workout =>
+//         workout.title.toLowerCase().includes(searching.toLowerCase())
+//       ));
+//   }, 1000); // Adjust timing as needed
 
-          {/* <Link href="/search" asChild> */}
+//   return () => clearTimeout(timer);
+// }, [searching]);
 
-            {/* </Link> */}
-  
-//! CHANGES IN search.tsx
-// import { useLocalSearchParams } from 'expo-router';
-
-  // const params: any = useLocalSearchParams(); 
-
-  
-    // useEffect(() => {
-    //   if (params.transcription) {
-    //     setSearching(params.transcription);
-    //   }
-    // }, [params.transcription])
+// {isLoading ? (
+//   <Skeleton count={10}/>
+// ) : (
 
 
 //TODO: FETCHING DATA FROM SUPABASE
