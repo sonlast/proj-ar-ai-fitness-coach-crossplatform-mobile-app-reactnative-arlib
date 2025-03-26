@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, StyleSheet, SafeAreaView, Text, View } from 'react-native';
+import { FlatList, Image, Keyboard, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Fonts } from '../constants/Fonts';
-import { faCircle, faClockRotateLeft, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faClockRotateLeft, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
@@ -178,90 +178,101 @@ const search = () => {
     <SafeAreaView style={styles.container}>
       <LinearGradient_ />
       <BackgroundImage />
-      <View style={styles.content}>
-        <Text style={styles.appName}> AR FitCoach </Text>
-        <Input
-          placeholder='Search workout...'
-          placeholderTextColor="#fff"
-          value={searching}
-          onChangeText={updateSearch}
-          onFocus={() => searching === '' && setShowRecent(true)}
-          containerStyle={styles.containerStyle}
-          inputContainerStyle={styles.inputContainer}
-          inputStyle={styles.input}
-          rightIcon={
-            searching ? (
-              <Pressable
-                onPress={() => {
-                  setSearching('');
-                  setShowRecent(true);
-                }}
-                style={styles.searchIconContainer}
-                hitSlop={{
-                  top: 5,
-                  right: 5,
-                  bottom: 5,
-                  left: 5,
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  size={20}
-                  color='#fff'
-                />
-              </Pressable>
-            ) : (
-              <View
-                style={styles.searchIconContainer}
-              >
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  color="#fff"
-                  size={20}
-                />
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss()
+          setShowRecent(false);
+        }}
+      >
+        <View style={styles.content}>
+          <Text style={styles.appName}> AR FitCoach </Text>
+          <Input
+            placeholder='Search workout...'
+            placeholderTextColor="#fff"
+            value={searching}
+            onChangeText={updateSearch}
+            onFocus={() => searching === '' && setShowRecent(true)}
+            containerStyle={styles.containerStyle}
+            inputContainerStyle={styles.inputContainer}
+            inputStyle={styles.input}
+            rightIcon={
+              searching ? (
+                <Pressable
+                  onPress={() => {
+                    setSearching('');
+                    setShowRecent(true);
+                  }}
+                  style={styles.searchIconContainer}
+                  hitSlop={{
+                    top: 5,
+                    right: 5,
+                    bottom: 5,
+                    left: 5,
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    size={20}
+                    color='#fff'
+                  />
+                </Pressable>
+              ) : (
+                <View
+                  style={styles.searchIconContainer}
+                >
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlass}
+                    color="#fff"
+                    size={20}
+                  />
+                </View>
+              )
+            }
+            autoFocus={false}
+            autoComplete='off'
+            cursorColor={'#fff'}
+          />
+          {showRecent && recentSearches.length > 0 && (
+            <View style={styles.recentSearchesContainer}>
+              <View style={styles.recentHeader}>
+                <FontAwesomeIcon icon={faClockRotateLeft} color="#fff" size={16} />
+                <Text style={styles.recentTitle}>Recent Searches</Text>
+                <Pressable onPress={clearRecentSearches} style={styles.clearButton}>
+                  <Text style={styles.clearText}>CLEAR</Text>
+                </Pressable>
               </View>
-            )
-          }
-          autoFocus={false}
-          autoComplete='off'
-          cursorColor={'#fff'}
-        />
-        {showRecent && recentSearches.length > 0 && (
-          <View style={styles.recentSearchesContainer}>
-            <View style={styles.recentHeader}>
-              <FontAwesomeIcon icon={faClockRotateLeft} color="#fff" size={16} />
-              <Text style={styles.recentTitle}>Recent Searches</Text>
-              <Pressable onPress={clearRecentSearches} style={styles.clearButton}>
-                <Text style={styles.clearText}>CLEAR</Text>
-              </Pressable>
+              {recentSearches.map((searchTerm, index) => (
+                <Pressable
+                  key={index}
+                  onPress={() => handleRecentSearchPress(searchTerm)}
+                  style={styles.recentItem}
+                >
+                  <Text style={styles.recentText}>
+                    {searchTerm}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
-            {recentSearches.map((searchTerm, index) => (
-              <Pressable
-                key={index}
-                onPress={() => handleRecentSearchPress(searchTerm)}
-                style={styles.recentItem}
-              >
-                <Text style={styles.recentText}>
-                  {searchTerm}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        )}
-        <FlatList
-          data={filterWorkouts}
-          renderItem={({ item }) => <Workout title={item.title} workoutDesc={item.workoutDesc} />}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            searching !== '' ? (
-              <View style={{ marginBottom: 20 }}>
-                <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
-              </View>
-            ) : null
-          }
-        />
-      </View>
+          )}
+          <FlatList
+            data={filterWorkouts}
+            renderItem={({ item }) => <Workout title={item.title} workoutDesc={item.workoutDesc} />}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            onScrollBeginDrag={() => {
+              Keyboard.dismiss();
+              setShowRecent(false);
+            }}
+            ListHeaderComponent={
+              searching !== '' ? (
+                <View style={{ marginBottom: 20 }}>
+                  <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+                </View>
+              ) : null
+            }
+          />
+        </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   )
 }
