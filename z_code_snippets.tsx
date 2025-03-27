@@ -1,3 +1,96 @@
+//TODO: MODAL USING REACT NATIVE MODAL
+{/* <Modal
+  animationType="fade"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+    <BlurView
+      intensity={50}
+      tint="systemThickMaterialDark"
+      style={StyleSheet.absoluteFill}
+    />
+    {/* <View style={styles.modalOverlay} /> */}
+  // </TouchableWithoutFeedback>
+
+  // <View style={styles.modalContainer}>
+  //   <View style={styles.modalContent}>
+  //     <Image
+  //       source={require('../assets/images/icon.png')}
+  //       style={styles.modalImage}
+  //     />
+  //     <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
+  //     <Text style={styles.modalDescription}>
+  //       {selectedWorkout?.workoutDesc || 'No description available.'}
+  //     </Text>
+  //     <Pressable
+  //       style={styles.modalCloseButton}
+  //       onPress={() => setModalVisible(false)}
+  //     >
+  //       <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
+  //     </Pressable>
+  //   </View>
+  // </View>
+// </Modal> */}
+
+//  //! STYLES FOR TEMP MODAL USING REACT-NATIVE-MODAL 
+//   modalOverlay: {
+//     flex: 1,
+//     backgroundColor: 'rgba(56, 56, 56, 0.7)',
+//   },
+//   modalContainer: {
+//     position: 'absolute',
+//     top: 0,
+//     bottom: 0,
+//     left: 0,
+//     right: 0,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   modalContent: {
+//     width: '85%',
+//     backgroundColor: 'rgba(0, 0, 0, 0.8)',
+//     borderRadius: 20,
+//     padding: 25,
+//     borderWidth: 1,
+//     borderColor: '#fff',
+//     // shadowColor: '#fff',
+//     // shadowOffset: { width: 0, height: 2 },
+//     // shadowOpacity: 0.8,
+//     // shadowRadius: 10,
+//     elevation: 5,
+//     overflow: 'hidden',
+//   },
+//   modalImage: {
+//     width: 80,
+//     height: 80,
+//     borderRadius: 40,
+//     alignSelf: 'center',
+//     marginBottom: 15,
+//   },
+//   modalTitle: {
+//     color: '#fff',
+//     fontSize: 22,
+//     fontFamily: Fonts.mainFont,
+//     textAlign: 'center',
+//     marginBottom: 10,
+//   },
+//   modalDescription: {
+//     color: '#fff',
+//     fontSize: 16,
+//     fontFamily: Fonts.mainFont,
+//     textAlign: 'center',
+//     lineHeight: 22,
+//   },
+//   modalCloseButton: {
+//     position: 'absolute',
+//     top: 15,
+//     right: 15,
+//     backgroundColor: '#333',
+//     borderRadius: 20,
+//     padding: 5,
+//   },
 //TODO: ADDING SKELETON EFFECTS
 // import Skeleton from '../components/Skeleton';
 // import { Skeleton } from '@rneui/base';
@@ -25,17 +118,17 @@
 
 //TODO: FETCHING DATA FROM SUPABASE
 // useEffect(() => {
-  //   const fetchDataFromSupabase = async () => {
-  //     try {
-  //       const files = await fetchData("recordings"); // Use your actual bucket name
-  //       setData(files);
-  //     } catch (error) {
-  //       console.error("Error fetching files: ", error);
-  //     }
-  //   };
+//   const fetchDataFromSupabase = async () => {
+//     try {
+//       const files = await fetchData("recordings"); // Use your actual bucket name
+//       setData(files);
+//     } catch (error) {
+//       console.error("Error fetching files: ", error);
+//     }
+//   };
 
-  //   fetchDataFromSupabase();
-  // }, []); // Runs once when component mounts
+//   fetchDataFromSupabase();
+// }, []); // Runs once when component mounts
 
 //TODO: SIGN UP BUTTON
 {/* <View style={styles.signUpTextContainer}>
