@@ -242,7 +242,12 @@ const index = () => {
           </Text>
         </View>
         <Link href="/search" asChild>
-          <Pressable onPress={() => console.log("Search")} style={styles.searchButton}>
+          <Pressable
+            // onPress={}
+            style={
+              styles.searchButton
+            }
+          >
             <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={{ color: "#fff" }} />
           </Pressable>
         </Link>
