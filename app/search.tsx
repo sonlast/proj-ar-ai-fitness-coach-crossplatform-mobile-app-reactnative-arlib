@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Keyboard, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { FlatList, Image, Keyboard, Modal, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Fonts } from '../constants/Fonts';
-import { faClockRotateLeft, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faClockRotateLeft, faMagnifyingGlass, faMicrophone, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
+import { BlurView } from 'expo-blur';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -62,16 +63,26 @@ const workouts = [
   },
 ]
 
-type workoutProps = {
+type WorkoutData = {
+  id: string;
   title: string;
   workoutDesc: string;
 }
 
-const Workout = ({ title, workoutDesc }: workoutProps) => {
+type workoutProps = {
+  workout: WorkoutData;
+  setSelectedWorkout: Dispatch<SetStateAction<WorkoutData | null>>;
+  setModalVisible: Dispatch<SetStateAction<boolean>>;
+}
+
+const Workout = ({ workout, setSelectedWorkout, setModalVisible }: workoutProps) => {
   return (
     <View style={styles.workout}>
       <Pressable
-        onPress={() => console.log(`Workout ${title} clicked.`)}
+        onPress={() => {
+          setSelectedWorkout(workout);
+          setModalVisible(true);
+        }}
       >
         <View style={styles.horizontalContent}>
           <View style={styles.imageContainer}>
@@ -82,10 +93,10 @@ const Workout = ({ title, workoutDesc }: workoutProps) => {
           </View>
           <View style={styles.workoutTextDescContainer}>
             <Text style={styles.workoutText}>
-              {title}
+              {workout.title}
             </Text>
             <Text style={styles.workoutDesc}>
-              {workoutDesc}
+              {workout.workoutDesc}
             </Text>
           </View>
         </View>
@@ -99,6 +110,8 @@ const search = () => {
   const [filterWorkouts, setFilterWorkouts] = useState(workouts);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecent, setShowRecent] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedWorkout, setSelectedWorkout] = useState<WorkoutData | null>(null);
   const { transcription } = useLocalSearchParams();
 
   useEffect(() => {
@@ -195,6 +208,7 @@ const search = () => {
             containerStyle={styles.containerStyle}
             inputContainerStyle={styles.inputContainer}
             inputStyle={styles.input}
+            onPressIn={(e) => e.stopPropagation()}
             rightIcon={
               searching ? (
                 <Pressable
@@ -221,7 +235,9 @@ const search = () => {
                   style={styles.searchIconContainer}
                 >
                   <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
+                    //TODO: STT Feature in Search Screen
+                    icon={faMicrophone}
+                    // icon={faMagnifyingGlass}
                     color="#fff"
                     size={20}
                   />
@@ -254,9 +270,44 @@ const search = () => {
               ))}
             </View>
           )}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <BlurView
+              intensity={50}
+              tint="dark"
+              style={StyleSheet.absoluteFill}
+            >
+              {/* <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback> */}
+
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <Image
+                    source={require('../assets/images/icon.png')}
+                    style={styles.modalImage}
+                  />
+                  <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
+                  <Text style={styles.modalDescription}>
+                    {selectedWorkout?.workoutDesc || 'No description available.'}
+                  </Text>
+                  <Pressable
+                    style={styles.modalCloseButton}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
+                  </Pressable>
+                </View>
+              </View>
+            </BlurView>
+          </Modal>
           <FlatList
             data={filterWorkouts}
-            renderItem={({ item }) => <Workout title={item.title} workoutDesc={item.workoutDesc} />}
+            renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} />}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             onScrollBeginDrag={() => {
@@ -416,6 +467,60 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontFamily: Fonts.mainFont,
+  },
+  // STYLES FOR TEMP MODAL
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(29, 29, 29, 0.7)',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalContent: {
+    width: '85%',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    borderRadius: 20,
+    padding: 25,
+    borderWidth: 1,
+    borderColor: '#fff',
+    shadowColor: '#fff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 5,
+    overflow: 'hidden',
+  },
+  modalImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignSelf: 'center',
+    marginBottom: 15,
+  },
+  modalTitle: {
+    color: '#fff',
+    fontSize: 22,
+    fontFamily: Fonts.mainFont,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalDescription: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: Fonts.mainFont,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    backgroundColor: '#333',
+    borderRadius: 20,
+    padding: 5,
   },
 })
 
