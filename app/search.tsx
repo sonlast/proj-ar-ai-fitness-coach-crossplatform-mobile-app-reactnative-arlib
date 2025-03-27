@@ -271,39 +271,38 @@ const search = () => {
             </View>
           )}
           <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => setModalVisible(false)}
           >
-            <BlurView
-              intensity={50}
-              tint="dark"
-              style={StyleSheet.absoluteFill}
-            >
-              {/* <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-              <View style={styles.modalOverlay} />
-            </TouchableWithoutFeedback> */}
+            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+              <BlurView
+                intensity={50}
+                tint="systemThickMaterialDark"
+                style={StyleSheet.absoluteFill}
+              />
+              {/* <View style={styles.modalOverlay} /> */}
+            </TouchableWithoutFeedback>
 
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <Image
-                    source={require('../assets/images/icon.png')}
-                    style={styles.modalImage}
-                  />
-                  <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
-                  <Text style={styles.modalDescription}>
-                    {selectedWorkout?.workoutDesc || 'No description available.'}
-                  </Text>
-                  <Pressable
-                    style={styles.modalCloseButton}
-                    onPress={() => setModalVisible(false)}
-                  >
-                    <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
-                  </Pressable>
-                </View>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Image
+                  source={require('../assets/images/icon.png')}
+                  style={styles.modalImage}
+                />
+                <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
+                <Text style={styles.modalDescription}>
+                  {selectedWorkout?.workoutDesc || 'No description available.'}
+                </Text>
+                <Pressable
+                  style={styles.modalCloseButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
+                </Pressable>
               </View>
-            </BlurView>
+            </View>
           </Modal>
           <FlatList
             data={filterWorkouts}
@@ -424,7 +423,7 @@ const styles = StyleSheet.create({
   },
   recentSearchesContainer: {
     position: 'absolute',
-    top: 90, // Adjust this value based on your header height
+    top: 95, // Adjust this value based on your header height
     left: '3%',
     right: '3%',
     backgroundColor: '#666',
@@ -468,16 +467,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.mainFont,
   },
-  // STYLES FOR TEMP MODAL
+  //! STYLES FOR TEMP MODAL USING REACT-NATIVE-MODAL 
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(29, 29, 29, 0.7)',
+    backgroundColor: 'rgba(56, 56, 56, 0.7)',
   },
   modalContainer: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalContent: {
     width: '85%',
@@ -486,10 +488,10 @@ const styles = StyleSheet.create({
     padding: 25,
     borderWidth: 1,
     borderColor: '#fff',
-    shadowColor: '#fff',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
+    // shadowColor: '#fff',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 10,
     elevation: 5,
     overflow: 'hidden',
   },
