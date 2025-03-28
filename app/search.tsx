@@ -111,6 +111,7 @@ const search = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecent, setShowRecent] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalSTT, setModalSTT] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutData | null>(null);
   const { transcription } = useLocalSearchParams();
 
@@ -199,6 +200,29 @@ const search = () => {
       >
         <View style={styles.content}>
           <Text style={styles.appName}> AR FitCoach </Text>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalSTT}
+            onRequestClose={() => setModalSTT(false)}
+          >
+            <TouchableWithoutFeedback onPress={() => setModalSTT(false)}>
+              <BlurView
+                intensity={50}
+                tint="systemThickMaterialDark"
+                style={StyleSheet.absoluteFill}
+              />
+              {/* <View style={styles.modalOverlay} /> */}
+            </TouchableWithoutFeedback>
+
+            <View style={styles.modalSTTContainer}>
+              {/* <View style={styles.modalContent}> */}
+              <View style={styles.modalMic}>
+                <FontAwesomeIcon icon={faMicrophone} size={50} color="#fff" />
+              </View>
+              {/* </View> */}
+            </View>
+          </Modal>
           <Input
             placeholder='Search workout...'
             placeholderTextColor="#fff"
@@ -231,8 +255,11 @@ const search = () => {
                   />
                 </Pressable>
               ) : (
-                <View
+                <Pressable
                   style={styles.searchIconContainer}
+                  onPress={() => {
+                    setModalSTT(true);
+                  }}
                 >
                   <FontAwesomeIcon
                     //TODO: STT Feature in Search Screen
@@ -241,7 +268,7 @@ const search = () => {
                     color="#fff"
                     size={20}
                   />
-                </View>
+                </Pressable>
               )
             }
             autoFocus={false}
@@ -481,13 +508,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  modalContent: {
-    width: '85%',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    borderRadius: 20,
-    padding: 25,
+  modalSTTContainer: {
+    position: 'absolute',
+    top: '30%', // Adjust this as needed for positioning
+    // Remove bottom, left, right positioning
+    width: 250, // Set a fixed width (make this whatever size you want)
+    height: 250, // Same as width to make it a perfect circle
+    borderRadius: 125, // Half of width/height
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center', // Center horizontally
+    paddingVertical: 50,
+    paddingHorizontal: 25,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Add background color
     borderWidth: 1,
     borderColor: '#fff',
+  },
+  modalContent: {
+    width: '85%',
+    borderRadius: 20,
+    padding: 25,
     // shadowColor: '#fff',
     // shadowOffset: { width: 0, height: 2 },
     // shadowOpacity: 0.8,
@@ -500,6 +540,14 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     alignSelf: 'center',
+    marginBottom: 15,
+  },
+  modalMic: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 15,
   },
   modalTitle: {
