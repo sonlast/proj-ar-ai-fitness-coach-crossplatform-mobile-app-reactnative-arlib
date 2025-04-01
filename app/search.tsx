@@ -6,9 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
 import { BlurView } from 'expo-blur';
+import { SheetManager } from 'react-native-actions-sheet';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const workouts = [
   {
@@ -258,7 +260,7 @@ const search = () => {
                 <Pressable
                   style={styles.searchIconContainer}
                   onPress={() => {
-                    setModalSTT(true);
+                    SheetManager.show('modalSheet');
                   }}
                 >
                   <FontAwesomeIcon

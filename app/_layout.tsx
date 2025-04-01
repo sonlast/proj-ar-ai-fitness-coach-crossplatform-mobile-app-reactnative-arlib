@@ -5,10 +5,12 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { Appearance } from 'react-native';
+import { SheetProvider } from 'react-native-actions-sheet';
 import 'react-native-reanimated';
 // import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { Fonts } from '@/constants/Fonts';
+import '@/constants/Sheets';
 
 const fontUsed = require('@/assets/fonts/mainFont.ttf');
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -31,22 +33,24 @@ export default function RootLayout() {
 
   if (!fontsLoaded && !fontsError) {
     return null;
-  }   
+  }
 
   return (
     // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
     <>
-      <Stack 
-        screenOptions={{
-          headerStyle: { backgroundColor: theme.backgroundHeader },
-        }}
-        > 
-        <Stack.Screen name="index" options={{ headerShown: false }}/>
-        <Stack.Screen name="search" options={{ headerShown: false }}/>
-        {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
-        <Stack.Screen name="+not-found" options={{ headerShown: false }}/>
-      </Stack>
-      <StatusBar style="dark" />
+      <SheetProvider>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: theme.backgroundHeader },
+          }}
+        >
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="search" options={{ headerShown: false }} />
+          {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
+          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+        </Stack>
+        <StatusBar style="dark" />
+      </SheetProvider>
     </>
     // </ThemeProvider>
   );
