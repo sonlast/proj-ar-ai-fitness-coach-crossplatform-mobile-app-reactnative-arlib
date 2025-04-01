@@ -306,7 +306,7 @@ const search = () => {
             <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
               <BlurView
                 intensity={50}
-                tint="systemThickMaterialDark"
+                tint="systemChromeMaterialDark"
                 style={StyleSheet.absoluteFill}
               />
               {/* <View style={styles.modalOverlay} /> */}
@@ -497,7 +497,6 @@ const styles = StyleSheet.create({
   //! STYLES FOR TEMP MODAL USING REACT-NATIVE-MODAL 
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(56, 56, 56, 0.7)',
   },
   modalContainer: {
     position: 'absolute',
@@ -520,7 +519,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center', // Center horizontally
     paddingVertical: 50,
     paddingHorizontal: 25,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Add background color
+    backgroundColor: 'rgba(0, 0, 0, 0.9)', // Add background color
     borderWidth: 1,
     borderColor: '#fff',
   },
@@ -528,11 +527,14 @@ const styles = StyleSheet.create({
     width: '85%',
     borderRadius: 20,
     padding: 25,
-    // shadowColor: '#fff',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.8,
-    // shadowRadius: 10,
-    elevation: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    shadowColor: '#fff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    // elevation: 5,
     overflow: 'hidden',
   },
   modalImage: {
