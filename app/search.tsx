@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+//! MODAL FROM REACT NATIVE MODAL BUILT IN
 import { FlatList, Image, Keyboard, Modal, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Fonts } from '../constants/Fonts';
 import { faClockRotateLeft, faMagnifyingGlass, faMicrophone, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
 import { BlurView } from 'expo-blur';
+// ! MODAL FROM REACT NATIVE ACTIONS SHEET
 import { SheetManager } from 'react-native-actions-sheet';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
@@ -113,7 +115,6 @@ const search = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecent, setShowRecent] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalSTT, setModalSTT] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutData | null>(null);
   const { transcription } = useLocalSearchParams();
 
@@ -202,29 +203,6 @@ const search = () => {
       >
         <View style={styles.content}>
           <Text style={styles.appName}> AR FitCoach </Text>
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalSTT}
-            onRequestClose={() => setModalSTT(false)}
-          >
-            <TouchableWithoutFeedback onPress={() => setModalSTT(false)}>
-              <BlurView
-                intensity={50}
-                tint="systemThickMaterialDark"
-                style={StyleSheet.absoluteFill}
-              />
-              {/* <View style={styles.modalOverlay} /> */}
-            </TouchableWithoutFeedback>
-
-            <View style={styles.modalSTTContainer}>
-              {/* <View style={styles.modalContent}> */}
-              <View style={styles.modalMic}>
-                <FontAwesomeIcon icon={faMicrophone} size={50} color="#fff" />
-              </View>
-              {/* </View> */}
-            </View>
-          </Modal>
           <Input
             placeholder='Search workout...'
             placeholderTextColor="#fff"
@@ -260,6 +238,7 @@ const search = () => {
                 <Pressable
                   style={styles.searchIconContainer}
                   onPress={() => {
+                    // ! MODAL FROM REACT-NATIVE-ACTIONS-SHEET
                     SheetManager.show('modalSheet');
                   }}
                 >
@@ -299,6 +278,7 @@ const search = () => {
               ))}
             </View>
           )}
+          {/* //! MODAL FROM REACT NATIVE MODAL BUILT IN */}
           <Modal
             animationType="fade"
             transparent={true}
@@ -496,7 +476,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.mainFont,
   },
-  //! STYLES FOR TEMP MODAL USING REACT-NATIVE-MODAL 
+  //! STYLES FOR REACT NATIVE MODAL
   modalOverlay: {
     flex: 1,
   },
@@ -508,22 +488,6 @@ const styles = StyleSheet.create({
     right: 0,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  modalSTTContainer: {
-    position: 'absolute',
-    top: '30%', // Adjust this as needed for positioning
-    // Remove bottom, left, right positioning
-    width: 250, // Set a fixed width (make this whatever size you want)
-    height: 250, // Same as width to make it a perfect circle
-    borderRadius: 125, // Half of width/height
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center', // Center horizontally
-    paddingVertical: 50,
-    paddingHorizontal: 25,
-    backgroundColor: 'rgba(0, 0, 0, 0.9)', // Add background color
-    borderWidth: 1,
-    borderColor: '#fff',
   },
   modalContent: {
     width: '85%',
