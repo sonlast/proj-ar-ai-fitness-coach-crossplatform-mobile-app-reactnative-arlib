@@ -1,3 +1,47 @@
+//TODO: MODAL FROM REACT NATIVE MODAL BUILT IN */}
+  // const [modalSTT, setModalSTT] = useState(false);
+
+{/* <Modal
+  animationType="fade"
+  transparent={true}
+  visible={modalSTT}
+  onRequestClose={() => setModalSTT(false)}
+>
+  <TouchableWithoutFeedback onPress={() => setModalSTT(false)}>
+    <BlurView
+      intensity={50}
+      tint="systemThickMaterialDark"
+      style={StyleSheet.absoluteFill}
+    />
+    {/* <View style={styles.modalOverlay} /> */}
+  // </TouchableWithoutFeedback>
+
+  // <View style={styles.modalSTTContainer}>
+  //   {/* <View style={styles.modalContent}> */}
+  //   <View style={styles.modalMic}>
+  //     <FontAwesomeIcon icon={faMicrophone} size={50} color="#fff" />
+  //   </View>
+  //   {/* </View> */}
+  // </View>
+// </Modal> */}
+
+// modalSTTContainer: {
+//   position: 'absolute',
+//   top: '30%', // Adjust this as needed for positioning
+//   // Remove bottom, left, right positioning
+//   width: 250, // Set a fixed width (make this whatever size you want)
+//   height: 250, // Same as width to make it a perfect circle
+//   borderRadius: 125, // Half of width/height
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   alignSelf: 'center', // Center horizontally
+//   paddingVertical: 50,
+//   paddingHorizontal: 25,
+//   backgroundColor: 'rgba(0, 0, 0, 0.9)', // Add background color
+//   borderWidth: 1,
+//   borderColor: '#fff',
+// },
+
 //TODO: MODAL USING REACT NATIVE MODAL
 {/* <Modal
   animationType="fade"
