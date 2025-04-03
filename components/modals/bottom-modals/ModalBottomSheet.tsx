@@ -14,7 +14,7 @@ type ModalBottomSheetProps = {
 
 const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>((props, ref) => {
   const snapPoints = useMemo(() => ['25%'], []);
-  const scaleAnim = new Animated.Value(1);
+  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -28,7 +28,7 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>((pr
     []
   );
 
-  const pulse = () => {
+  const pulse = useCallback(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(scaleAnim, {
@@ -43,12 +43,12 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>((pr
         })
       ])
     ).start();
-  }
+  }, [scaleAnim]);
 
   useEffect(() => {
     pulse();
     return () => scaleAnim.stopAnimation();
-  }, [])
+  }, [pulse])
 
   return (
     <BottomSheetModal
