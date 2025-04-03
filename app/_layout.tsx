@@ -5,9 +5,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { Appearance } from 'react-native';
+//! Imported actionsheet from react-native-actions-sheet
 import { SheetProvider } from 'react-native-actions-sheet';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+//! Imported modal from @gorhom/bottom-sheet
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 // import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
