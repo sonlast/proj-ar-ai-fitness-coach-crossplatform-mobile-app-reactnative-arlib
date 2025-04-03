@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import { Appearance } from 'react-native';
 import { SheetProvider } from 'react-native-actions-sheet';
 import 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 // import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { Fonts } from '@/constants/Fonts';
@@ -37,21 +39,26 @@ export default function RootLayout() {
 
   return (
     // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-    <>
+    //! (1) Provider for REACT NATIVE BOTTOM SHEET
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* //! Provider for REACT NATIVE ACTIONS SHEET */}
       <SheetProvider>
-        <Stack
-          screenOptions={{
-            headerStyle: { backgroundColor: theme.backgroundHeader },
-          }}
-        >
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="search" options={{ headerShown: false }} />
-          {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
-          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-        </Stack>
-        <StatusBar style="dark" />
+        {/* //! (2) Provider for REACT NATIVE BOTTOM SHEET */}
+        <BottomSheetModalProvider>
+          <Stack
+            screenOptions={{
+              headerStyle: { backgroundColor: theme.backgroundHeader },
+            }}
+          >
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="search" options={{ headerShown: false }} />
+            {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
+            <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+          </Stack>
+          <StatusBar style="dark" />
+        </BottomSheetModalProvider>
       </SheetProvider>
-    </>
+    </GestureHandlerRootView>
     // </ThemeProvider>
   );
 }
