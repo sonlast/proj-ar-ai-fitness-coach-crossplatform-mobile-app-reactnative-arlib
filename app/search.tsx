@@ -1,18 +1,20 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-//! MODAL FROM REACT NATIVE MODAL BUILT IN
-import { FlatList, Image, Keyboard, Modal, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import { FlatList, Image, Keyboard, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Fonts } from '../constants/Fonts';
 import { faClockRotateLeft, faMagnifyingGlass, faMicrophone, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
-import { BlurView } from 'expo-blur';
-// ! MODAL FROM REACT NATIVE ACTIONS SHEET
-import { SheetManager } from 'react-native-actions-sheet';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+//! MODAL FROM REACT NATIVE BOTTOM SHEET
+import ModalBottomSheet from '@/components/modals/bottom-modals/ModalBottomSheet';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+//! MODAL FROM REACT NATIVE ACTIONS SHEET
+import { SheetManager } from 'react-native-actions-sheet';
+//! MODAL FROM REACT NATIVE MODAL BUILT IN
+import ModalRNModal from '@/components/modals/pop-up-modals/ModalRNModal';
 
 const workouts = [
   {
@@ -24,7 +26,7 @@ const workouts = [
     id: '2',
     title: 'Sit Ups',
     workoutDesc: 'Sit ups are a great way to work out your core.',
-  },
+  },  
   {
     id: '3',
     title: 'Planks',
@@ -114,9 +116,16 @@ const search = () => {
   const [filterWorkouts, setFilterWorkouts] = useState(workouts);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecent, setShowRecent] = useState(false);
+  //! MODAL FROM REACT NATIVE MODAL BUILT IN
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutData | null>(null);
   const { transcription } = useLocalSearchParams();
+  //! MODAL FROM REACT NATIVE BOTTOM SHEET
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
 
   useEffect(() => {
     const loadRecentSearches = async () => {
@@ -195,6 +204,7 @@ const search = () => {
     <SafeAreaView style={styles.container}>
       <LinearGradient_ />
       <BackgroundImage />
+      <ModalBottomSheet ref={bottomSheetModalRef}/>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss()
@@ -238,8 +248,10 @@ const search = () => {
                 <Pressable
                   style={styles.searchIconContainer}
                   onPress={() => {
-                    // ! MODAL FROM REACT-NATIVE-ACTIONS-SHEET
-                    SheetManager.show('modalSheet');
+                    // ! MODAL FROM REACT-NATIVE-ACTIONS-SHEET < ------------------------------------------------------------------------
+                    // SheetManager.show('modalSheet');
+                    // ! MODAL FROM REACT-NATIVE-BOTTOM-SHEET < -------------------------------------------------------------------------
+                    handlePresentModalPress();
                   }}
                 >
                   <FontAwesomeIcon
@@ -279,40 +291,8 @@ const search = () => {
             </View>
           )}
           {/* //! MODAL FROM REACT NATIVE MODAL BUILT IN */}
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-          >
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-              <BlurView
-                intensity={50}
-                tint="systemChromeMaterialDark"
-                style={StyleSheet.absoluteFill}
-              />
-              {/* <View style={styles.modalOverlay} /> */}
-            </TouchableWithoutFeedback>
-
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Image
-                  source={require('../assets/images/icon.png')}
-                  style={styles.modalImage}
-                />
-                <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
-                <Text style={styles.modalDescription}>
-                  {selectedWorkout?.workoutDesc || 'No description available.'}
-                </Text>
-                <Pressable
-                  style={styles.modalCloseButton}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
-                </Pressable>
-              </View>
-            </View>
-          </Modal>
+          <ModalRNModal visible={modalVisible} onClose={() => setModalVisible(false)} selectedWorkout={selectedWorkout}/>
+          {/* //! MODAL FROM REACT NATIVE PAPER */}
           <FlatList
             data={filterWorkouts}
             renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} />}
@@ -475,70 +455,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontFamily: Fonts.mainFont,
-  },
-  //! STYLES FOR REACT NATIVE MODAL
-  modalOverlay: {
-    flex: 1,
-  },
-  modalContainer: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    width: '85%',
-    borderRadius: 20,
-    padding: 25,
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    shadowColor: '#fff',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    borderWidth: 1,
-    borderColor: '#fff',
-    // elevation: 5,
-    overflow: 'hidden',
-  },
-  modalImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignSelf: 'center',
-    marginBottom: 15,
-  },
-  modalMic: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-  },
-  modalTitle: {
-    color: '#fff',
-    fontSize: 22,
-    fontFamily: Fonts.mainFont,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  modalDescription: {
-    color: '#fff',
-    fontSize: 16,
-    fontFamily: Fonts.mainFont,
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-  modalCloseButton: {
-    position: 'absolute',
-    top: 15,
-    right: 15,
-    backgroundColor: '#333',
-    borderRadius: 20,
-    padding: 5,
   },
 })
 
