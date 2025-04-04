@@ -11,6 +11,8 @@ import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 //! Imported modal from @gorhom/bottom-sheet
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+//! Imported modal from react-native-paper
+import { PaperProvider } from 'react-native-paper';
 // import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { Fonts } from '@/constants/Fonts';
@@ -41,25 +43,28 @@ export default function RootLayout() {
 
   return (
     // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-    //! (1) Provider for REACT NATIVE BOTTOM SHEET
+    // ! (1) Provider for REACT NATIVE BOTTOM SHEET
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* //! Provider for REACT NATIVE ACTIONS SHEET */}
-      <SheetProvider>
-        {/* //! (2) Provider for REACT NATIVE BOTTOM SHEET */}
-        <BottomSheetModalProvider>
-          <Stack
-            screenOptions={{
-              headerStyle: { backgroundColor: theme.backgroundHeader },
-            }}
-          >
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="search" options={{ headerShown: false }} />
-            {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
-            <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-          </Stack>
-          <StatusBar style="dark" />
-        </BottomSheetModalProvider>
-      </SheetProvider>
+      {/* //! Provider for REACT NATIVE PAPER */}
+      <PaperProvider>
+        {/* //! Provider for REACT NATIVE ACTIONS SHEET */}
+        <SheetProvider>
+          {/* //! (2) Provider for REACT NATIVE BOTTOM SHEET */}
+          <BottomSheetModalProvider>
+            <Stack
+              screenOptions={{
+                headerStyle: { backgroundColor: theme.backgroundHeader },
+              }}
+            >
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="search" options={{ headerShown: false }} />
+              {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
+              <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+            </Stack>
+            <StatusBar style="dark" />
+          </BottomSheetModalProvider>
+        </SheetProvider>
+      </PaperProvider>
     </GestureHandlerRootView>
     // </ThemeProvider>
   );

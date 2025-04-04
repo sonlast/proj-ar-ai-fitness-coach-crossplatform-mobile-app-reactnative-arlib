@@ -15,6 +15,8 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { SheetManager } from 'react-native-actions-sheet';
 //! MODAL FROM REACT NATIVE MODAL BUILT IN
 import ModalRNModal from '@/components/modals/pop-up-modals/ModalRNModal';
+//! MODAL FROM REACT NATIVE PAPER
+import ModalRNPaper from '@/components/modals/pop-up-modals/ModalRNPaper';
 
 const workouts = [
   {
@@ -291,8 +293,9 @@ const search = () => {
             </View>
           )}
           {/* //! MODAL FROM REACT NATIVE MODAL BUILT IN */}
-          <ModalRNModal visible={modalVisible} onClose={() => setModalVisible(false)} selectedWorkout={selectedWorkout}/>
+          {/* <ModalRNModal visible={modalVisible} onClose={() => setModalVisible(false)} selectedWorkout={selectedWorkout}/> */}
           {/* //! MODAL FROM REACT NATIVE PAPER */}
+          <ModalRNPaper visible={modalVisible} onDismiss={() => setModalVisible(false)} selectedWorkout={selectedWorkout} />
           <FlatList
             data={filterWorkouts}
             renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} />}

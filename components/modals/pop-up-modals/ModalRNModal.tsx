@@ -89,14 +89,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 15,
   },
-  modalMic: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-  },
   modalTitle: {
     color: '#fff',
     fontSize: 22,
