@@ -1,5 +1,15 @@
+//! MODAL FROM REACT NATIVE ACTIONS SHEET
+// import { SheetManager } from 'react-native-actions-sheet';
+
+// SheetManager.show('modalSheet');
+
+//! /! MODAL FROM REACT NATIVE MODAL BUILT IN
+// import ModalRNModal from '@/components/modals/pop-up-modals/ModalRNModal';
+
+// {/* <ModalRNModal visible={modalVisible} onClose={() => setModalVisible(false)} selectedWorkout={selectedWorkout}/> */ }
+
 //TODO: MODAL FROM REACT NATIVE MODAL BUILT IN */}
-  // const [modalSTT, setModalSTT] = useState(false);
+// const [modalSTT, setModalSTT] = useState(false);
 
 {/* <Modal
   animationType="fade"
@@ -14,15 +24,15 @@
       style={StyleSheet.absoluteFill}
     />
     {/* <View style={styles.modalOverlay} /> */}
-  // </TouchableWithoutFeedback>
+// </TouchableWithoutFeedback>
 
-  // <View style={styles.modalSTTContainer}>
-  //   {/* <View style={styles.modalContent}> */}
-  //   <View style={styles.modalMic}>
-  //     <FontAwesomeIcon icon={faMicrophone} size={50} color="#fff" />
-  //   </View>
-  //   {/* </View> */}
-  // </View>
+// <View style={styles.modalSTTContainer}>
+//   {/* <View style={styles.modalContent}> */}
+//   <View style={styles.modalMic}>
+//     <FontAwesomeIcon icon={faMicrophone} size={50} color="#fff" />
+//   </View>
+//   {/* </View> */}
+// </View>
 // </Modal> */}
 
 // modalSTTContainer: {
@@ -56,26 +66,26 @@
       style={StyleSheet.absoluteFill}
     />
     {/* <View style={styles.modalOverlay} /> */}
-  // </TouchableWithoutFeedback>
+// </TouchableWithoutFeedback>
 
-  // <View style={styles.modalContainer}>
-  //   <View style={styles.modalContent}>
-  //     <Image
-  //       source={require('../assets/images/icon.png')}
-  //       style={styles.modalImage}
-  //     />
-  //     <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
-  //     <Text style={styles.modalDescription}>
-  //       {selectedWorkout?.workoutDesc || 'No description available.'}
-  //     </Text>
-  //     <Pressable
-  //       style={styles.modalCloseButton}
-  //       onPress={() => setModalVisible(false)}
-  //     >
-  //       <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
-  //     </Pressable>
-  //   </View>
-  // </View>
+// <View style={styles.modalContainer}>
+//   <View style={styles.modalContent}>
+//     <Image
+//       source={require('../assets/images/icon.png')}
+//       style={styles.modalImage}
+//     />
+//     <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
+//     <Text style={styles.modalDescription}>
+//       {selectedWorkout?.workoutDesc || 'No description available.'}
+//     </Text>
+//     <Pressable
+//       style={styles.modalCloseButton}
+//       onPress={() => setModalVisible(false)}
+//     >
+//       <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
+//     </Pressable>
+//   </View>
+// </View>
 // </Modal> */}
 
 //  //! STYLES FOR TEMP MODAL USING REACT-NATIVE-MODAL 

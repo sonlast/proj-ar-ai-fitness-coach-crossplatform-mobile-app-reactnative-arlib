@@ -11,10 +11,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //! MODAL FROM REACT NATIVE BOTTOM SHEET
 import ModalBottomSheet from '@/components/modals/bottom-modals/ModalBottomSheet';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-//! MODAL FROM REACT NATIVE ACTIONS SHEET
-import { SheetManager } from 'react-native-actions-sheet';
-//! MODAL FROM REACT NATIVE MODAL BUILT IN
-import ModalRNModal from '@/components/modals/pop-up-modals/ModalRNModal';
 //! MODAL FROM REACT NATIVE PAPER
 import ModalRNPaper from '@/components/modals/pop-up-modals/ModalRNPaper';
 
@@ -118,7 +114,6 @@ const search = () => {
   const [filterWorkouts, setFilterWorkouts] = useState(workouts);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecent, setShowRecent] = useState(false);
-  //! MODAL FROM REACT NATIVE MODAL BUILT IN
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutData | null>(null);
   const { transcription } = useLocalSearchParams();
@@ -206,6 +201,7 @@ const search = () => {
     <SafeAreaView style={styles.container}>
       <LinearGradient_ />
       <BackgroundImage />
+      {/* //! MODAL FROM REACT NATIVE BOTTOM SHEET */}
       <ModalBottomSheet ref={bottomSheetModalRef}/>
       <TouchableWithoutFeedback
         onPress={() => {
@@ -250,8 +246,6 @@ const search = () => {
                 <Pressable
                   style={styles.searchIconContainer}
                   onPress={() => {
-                    // ! MODAL FROM REACT-NATIVE-ACTIONS-SHEET < ------------------------------------------------------------------------
-                    // SheetManager.show('modalSheet');
                     // ! MODAL FROM REACT-NATIVE-BOTTOM-SHEET < -------------------------------------------------------------------------
                     handlePresentModalPress();
                   }}
@@ -292,8 +286,6 @@ const search = () => {
               ))}
             </View>
           )}
-          {/* //! MODAL FROM REACT NATIVE MODAL BUILT IN */}
-          {/* <ModalRNModal visible={modalVisible} onClose={() => setModalVisible(false)} selectedWorkout={selectedWorkout}/> */}
           {/* //! MODAL FROM REACT NATIVE PAPER */}
           <ModalRNPaper visible={modalVisible} onDismiss={() => setModalVisible(false)} selectedWorkout={selectedWorkout} />
           <FlatList
