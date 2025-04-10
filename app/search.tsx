@@ -115,6 +115,7 @@ const search = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecent, setShowRecent] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutData | null>(null);
   const { transcription } = useLocalSearchParams();
   //! MODAL FROM REACT NATIVE BOTTOM SHEET
@@ -124,6 +125,11 @@ const search = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
+  const handleDismissModal = useCallback(() => {
+    bottomSheetModalRef.current?.dismiss();
+  }, []);
+
+  
   useEffect(() => {
     const loadRecentSearches = async () => {
       try {
@@ -135,7 +141,7 @@ const search = () => {
         console.error('Error loading recent searches:', error);
       }
     };
-
+    
     loadRecentSearches();
   }, []);
 
@@ -159,6 +165,13 @@ const search = () => {
       console.error('Error saving recent searches:', error);
     }
   };
+  
+  const handleTranscription = useCallback((text: string) => {
+    if (text && text !== 'Real-time transcription in progress') {
+      setSearching(text);
+      addToRecentSearches(text);
+    }
+  }, [addToRecentSearches]);
 
   useEffect(() => {
     if (transcription) {
@@ -202,7 +215,7 @@ const search = () => {
       <LinearGradient_ />
       <BackgroundImage />
       {/* //! MODAL FROM REACT NATIVE BOTTOM SHEET */}
-      <ModalBottomSheet ref={bottomSheetModalRef}/>
+      <ModalBottomSheet ref={bottomSheetModalRef} onTranscription={handleTranscription} onClose={handleDismissModal}/>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss()
