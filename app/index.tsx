@@ -221,7 +221,15 @@ const index = () => {
         <Text style={styles.appName}> AR FitCoach </Text>
         <Pressable onPress={isRecording ? stopRecording : startRecording} style={[styles.speakButton, { borderWidth: 3, borderColor: borderColor }]}>
           {isTranscribing ? (
-            <Loading />
+            <Loading 
+              loaderStyle={{
+                width: 140,
+                height: 140,
+                marginTop: 40,
+                marginBottom: 40,
+                alignSelf: "center"
+              }}
+            />
           ) : (
             <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
           )}
