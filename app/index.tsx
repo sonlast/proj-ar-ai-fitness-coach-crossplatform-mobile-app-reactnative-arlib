@@ -9,63 +9,79 @@ import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import Loading from '../components/Loading';
 import { uploadAudio } from '../utils/supabase';
-
 import { Fonts } from '../constants/Fonts';
 
-const index = () => {
+// Constants
+const WEBSOCKET_URL = 'wss://ar-fitcoach.onrender.com';
+const TRANSCRIBE_URL = 'https://ar-fitcoach.onrender.com/transcribe';
+const INITIAL_COLORS = {
+  icon: "#000",
+  text: "#fff",
+  border: "#D9D9D9"
+};
+const RECORDING_COLORS = {
+  icon: "#f00",
+  text: "#f00",
+  border: "#f00"
+};
+const STARTING_COLORS = {
+  icon: "#0f0",
+  text: "#0f0",
+  border: "#0f0"
+};
+
+// Types
+type ColorState = {
+  icon: string;
+  text: string;
+  border: string;
+};
+
+const Index = () => {
+  const router = useRouter();
   const [isRecording, setIsRecording] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
-  const [iconColor, setIconColor] = useState("#000");
-  const [textColor, setTextColor] = useState("#fff");
-  const [borderColor, setBorderColor] = useState("#D9D9D9");
+  const [colors, setColors] = useState<ColorState>(INITIAL_COLORS);
   const [transcription, setTranscription] = useState('');
   const [isTranscribing, setIsTranscribing] = useState(false);
-  const router = useRouter();
-  // const [data, setData] = useState<any[]>([]);
+
+  const handleWebSocketMessage = useCallback((event: MessageEvent) => {
+    const message = JSON.parse(event.data);
+    if (message.type === 'transcription') {
+      if (message.data === "End of Transcript") {
+        console.log("Transcript completed.");
+        return;
+      }
+      
+      if (message.data && !message.data.includes("Partial Transcript")) {
+        const cleanTranscription = message.data.replace(/[.,;!?]+$/, '').trim();
+        setTranscription(cleanTranscription);
+        setIsTranscribing(false);
+        router.push({
+          pathname: '/search',
+          params: { transcription: cleanTranscription }
+        });
+      } else {
+        console.log('Partial Transcript:', message.data);
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
-    // const ws = new WebSocket('ws://192.168.55.100:8080');
-    const ws = new WebSocket('wss://ar-fitcoach.onrender.com');
-
+    const ws = new WebSocket(WEBSOCKET_URL);
     ws.onopen = () => console.log('WebSocket connection established');
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.type === 'transcription') {
-        if (message.data === "End of Transcript") {
-          console.log("Transcript completed.");
-        } else if (message.data && !message.data.includes("Partial Transcript")) {
-          // Only update the transcription state for the final transcript
-          const cleanTranscription = message.data
-            .replace(/[.,;!?]+$/, '')
-            .trim();
-
-          setTranscription(cleanTranscription);
-          setIsTranscribing(false);
-          router.push({
-            pathname: '/search',
-            params: { transcription: cleanTranscription }
-          });
-        } else {
-          // Log partial transcripts for debugging purposes
-          console.log('Partial Transcript:', message.data);
-        }
-      }
-      console.log('Received message:', message);
-    };
-
+    ws.onmessage = handleWebSocketMessage;
     ws.onerror = (error) => console.error('WebSocket error:', error);
     ws.onclose = () => {
       console.log('WebSocket connection closed');
       setIsTranscribing(false);
-    }
+    };
 
     return () => ws.close();
-  }, []); // Ensure it only runs once
+  }, [handleWebSocketMessage]);
 
   const startRecording = async () => {
     try {
-      // console.log("Starting recording...");
       const { granted } = await Audio.requestPermissionsAsync();
       if (!granted) {
         Alert.alert('Permission to access microphone was denied');
@@ -85,7 +101,7 @@ const index = () => {
         },
         ios: {
           extension: '.m4a',
-          outputFormat: "aac ",
+          outputFormat: "aac",
           audioQuality: 127,
           sampleRate: 44100,
           numberOfChannels: 2,
@@ -98,176 +114,109 @@ const index = () => {
           mimeType: 'audio/webm',
           bitsPerSecond: 128000,
         },
-        // isMeteringEnabled: true,
       });
+
       await recording.startAsync();
       setRecording(recording);
       setIsRecording(true);
-      setIconColor("#0f0");
-      setTextColor("#0f0");
-      setBorderColor("#0f0");
+      setColors(STARTING_COLORS);
 
       setTimeout(() => {
-        setIconColor("#f00");
-        setTextColor("#f00");
-        setBorderColor("#f00");
+        setColors(RECORDING_COLORS);
       }, 1000);
-
-      // console.log("Recording started");
     } catch (err) {
-      console.error('Failed to start recording', err);
+      console.error('Failed to start recording:', err);
     }
   };
 
-  // const uploadAudioForTranscription = async (audioUri: string) => {
-  //   const formData = new FormData();
-  //   formData.append('audio', {
-  //     uri: audioUri,
-  //     name: 'audio.m4a',
-  //     type: 'audio/m4a',
-  //   } as any);
-
-  //   try {
-  //     const response = await fetch('http://192.168.55.100:3000/transcribe', {
-  //       method: 'POST',
-  //       body: formData,
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-
-  //     const data = await response.json();
-  //     console.log('Transcription:', data.transcript);
-  //     Alert.alert('Transcription Result', data.transcript);
-  //   } catch (error) {
-  //     console.error('Error uploading audio:', error);
-  //     Alert.alert('Error', 'Failed to transcribe audio');
-  //   }
-  // };
-
   const stopRecording = async () => {
-    try {
-      // console.log("Stopping recording...");
-      if (!recording) return;
+    if (!recording) return;
 
+    try {
       setIsTranscribing(true);
-      setIconColor("#000");
-      setTextColor("#fff");
-      setBorderColor("#D9D9D9");
+      setColors(INITIAL_COLORS);
+      
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
-      // console.log("Recording stopped and stored at", uri);
+      
+      if (!uri) throw new Error("Recording URI is null");
 
-      if (!uri) {
-        throw new Error("Recording URI is null");
-      }
-
-      //! Read file as binary (Base64)
       const fileData = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      //! Convert Base64 to a valid format for Supabase Storage
       const fileBlob = new Uint8Array(
         atob(fileData).split("").map((char) => char.charCodeAt(0))
       );
 
-
       const filePath = `recordings/${Date.now()}.m4a`;
-
-      await uploadAudio(filePath, fileBlob)
+      await uploadAudio(filePath, fileBlob);
 
       setRecording(null);
       setIsRecording(false);
 
-      const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
-        // const response = await fetch('http://192.168.55.100:3000/transcribe', {
+      const response = await fetch(TRANSCRIBE_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filePath }),
       });
 
+      if (!response.ok) throw new Error('Transcription request failed');
+
       const data = await response.json();
       console.log('Transcription:', data.transcription);
-
-      // await uploadAudioForTranscription(uri);
-      // console.log("Recording stopped");
     } catch (err) {
-      console.error('Failed to stop recording', err);
+      console.error('Failed to stop recording:', err);
       setIsTranscribing(false);
     }
   };
 
   useEffect(() => {
-    const requestPermission = async () => {
-      const { granted } = await Audio.requestPermissionsAsync();
+    Audio.requestPermissionsAsync().then(({ granted }) => {
       if (!granted) {
         Alert.alert('Permission to access microphone was denied');
       }
-    }
-    requestPermission();
+    });
   }, []);
 
-  // console.log(`REVAI API KEY: ${process.env.EXPO_PUBLIC_REVAI_API}`)
-  // console.log(`SUPABASE URL: ${process.env.EXPO_PUBLIC_SUPABASE_URL}`)
-  // console.log(`SUPABASE KEY: ${process.env.EXPO_PUBLIC_SUPABASE_KEY}`)
   return (
     <View style={styles.container}>
       <LinearGradient_ />
       <BackgroundImage />
       <View style={styles.container}>
         <Text style={styles.appName}> AR FitCoach </Text>
-        <Pressable onPress={isRecording ? stopRecording : startRecording} style={[styles.speakButton, { borderWidth: 3, borderColor: borderColor }]}>
+        <Pressable 
+          onPress={isRecording ? stopRecording : startRecording} 
+          style={[styles.speakButton, { borderWidth: 3, borderColor: colors.border }]}
+        >
           {isTranscribing ? (
             <Loading 
-              loaderStyle={{
-                width: 140,
-                height: 140,
-                marginTop: 40,
-                marginBottom: 40,
-                alignSelf: "center"
-              }}
+              loaderStyle={styles.loader}
             />
           ) : (
-            <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: iconColor }} />
+            <FontAwesomeIcon icon={faMicrophone} size={50} style={{ color: colors.icon }} />
           )}
         </Pressable>
-        <View style={{ marginTop: 40 }}>
-          <Text style={[styles.miscText, { color: textColor }]}>
+        <View style={styles.textContainer}>
+          <Text style={[styles.miscText, { color: colors.text }]}>
             {isRecording ? "TAP TO STOP" : "TAP TO SPEAK"}
           </Text>
         </View>
-        <View style={{ marginTop: 40 }}>
-          <Text style={styles.smallText}>
-            OR
-          </Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.smallText}>OR</Text>
         </View>
-        <View style={{ marginTop: 40 }}>
-          <Text style={styles.miscText}>
-            Search Manually
-          </Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.miscText}>Search Manually</Text>
         </View>
         <Link href="/search" asChild>
-          <Pressable
-            // onPress={}
-            style={
-              styles.searchButton
-            }
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={{ color: "#fff" }} />
+          <Pressable style={styles.searchButton}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={styles.searchIcon} />
           </Pressable>
         </Link>
-        {/* <View style={{ marginTop: 40 }}>
-          <Text style={styles.miscText}>
-            Transcription: {transcription}
-          </Text>
-        </View> */}
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -314,7 +263,20 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontFamily: Fonts.mainFont
+  },
+  textContainer: {
+    marginTop: 40
+  },
+  loader: {
+    width: 140,
+    height: 140,
+    marginTop: 40,
+    marginBottom: 40,
+    alignSelf: "center"
+  },
+  searchIcon: {
+    color: "#fff"
   }
-})
+});
 
-export default index;
+export default Index;

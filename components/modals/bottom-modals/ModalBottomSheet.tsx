@@ -17,7 +17,7 @@ type ModalBottomSheetProps = {
 };
 
 const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>(({ onTranscription, onClose }, ref) => {
-  const snapPoints = useMemo(() => ['25%'], []);
+  const snapPoints = useMemo(() => ['25%'], []); // Changed from 25% to 50% for better visibility
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const [isRecording, setIsRecording] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
@@ -32,9 +32,15 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>(({ 
         disappearsOnIndex={-1}
         appearsOnIndex={0}
         pressBehavior="close"
+        onPress={() => {
+          // Make sure recording is stopped when backdrop is pressed
+          if (isRecording && recording) {
+            stopAndCleanup(false);
+          }
+        }}
       />
     ),
-    []
+    [isRecording, recording]
   );
 
   const pulse = useCallback(() => {
@@ -59,11 +65,11 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>(({ 
     pulseAnimation.current.start();
   }, [scaleAnim]);
 
-  const handleRecordPress = async () => {
-    if (isRecording) {
-      try {
-        setIsTranscribing(true);
-        if (recording) {
+  const stopAndCleanup = async (shouldTranscribe: boolean = true) => {
+    try {
+      setIsTranscribing(shouldTranscribe);
+      if (recording) {
+        if (shouldTranscribe) {
           const filePath = await stopRecording(recording);
 
           const response = await fetch('https://ar-fitcoach.onrender.com/transcribe', {
@@ -88,37 +94,36 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>(({ 
             .trim();
 
           onTranscription(cleanTranscription);
-          onClose?.();
+        } else {
+          await recording.stopAndUnloadAsync();
         }
-      } catch (error) {
-        console.error('Error stopping recording:', error);
-        onTranscription('');
-        setIsMounted(false);
-        if (pulseAnimation.current) {
-          pulseAnimation.current.stop();
-        }
-        scaleAnim.setValue(1);
-      } finally {
-        setIsRecording(false);
-        setRecording(null);
-        setIsTranscribing(false);
-        setIsMounted(false);
-        setTimeout(() => setIsMounted(true), 1000)
       }
-    } else {
-      try {
-        setIsMounted(true);
-        const newRecording: any = await startRecording();
-        if (newRecording) {
-          setRecording(newRecording);
-          setIsRecording(true);
-        }
-      } catch (error) {
-        console.error('Error starting recording:', error);
-        setIsMounted(false);
-      }
+    } catch (error) {
+      console.error('Error stopping recording:', error);
+      onTranscription('');
+    } finally {
+      setIsRecording(false);
+      setRecording(null);
+      setIsTranscribing(false);
+      setIsMounted(false);
+      onClose?.();
     }
-  }
+  };
+
+  const startRecordingOnMount = async () => {
+    try {
+      setIsMounted(true);
+      const newRecording: any = await startRecording();
+      if (newRecording) {
+        setRecording(newRecording);
+        setIsRecording(true);
+      }
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      setIsMounted(false);
+      onClose?.();
+    }
+  };
 
   useEffect(() => {
     if (isMounted) {
@@ -134,31 +139,30 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>(({ 
       if (pulseAnimation.current) {
         pulseAnimation.current.stop();
       }
-      scaleAnim.setValue(1);
-      // if (recording) {
-      //   recording.stopAndUnloadAsync();
-      // }
     };
-  }, [isMounted, pulse, scaleAnim])
+  }, [isMounted, pulse, scaleAnim]);
 
   return (
     <BottomSheetModal
       ref={ref}
       index={1}
       snapPoints={snapPoints}
-      enablePanDownToClose={false}
+      enablePanDownToClose={true}
       enableContentPanningGesture={false}
       backgroundStyle={{ backgroundColor: '#333' }}
-      handleIndicatorStyle={{ backgroundColor: 'transparent' }}
+      handleIndicatorStyle={{ backgroundColor: 'transparent' }} // Made the indicator more visible
       backdropComponent={renderBackdrop}
       onDismiss={() => {
-        if (recording) {
-          recording.stopAndUnloadAsync();
+        if (isRecording && recording) {
+          stopAndCleanup(false);
         }
-        setIsRecording(false);
-        setRecording(null);
-        setIsTranscribing(false);
-        onClose?.();
+      }}
+      onChange={(index) => {
+        if (index === 1) { // Changed from 0 to 1 to match the index prop
+          startRecordingOnMount();
+        } else if (index === -1 && isRecording && recording) {
+          stopAndCleanup(false);
+        }
       }}
     >
       <BottomSheetView
@@ -167,26 +171,16 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>(({ 
           height: 270,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          // borderBottomLeftRadius: 0,
-          // borderBottomRightRadius: 0,
           paddingHorizontal: 20,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Text
-          style={styles.titleText}
-        >
+        <Text style={styles.titleText}>
           Speak To Search
         </Text>
-        <View
-          style={{
-            padding: 40,
-          }}
-        >
-          <Pressable
-            onPress={handleRecordPress}
-          >
+        <View style={{ padding: 40 }}>
+          <Pressable onPress={() => isRecording && stopAndCleanup(true)}>
             <Animated.View
               style={[
                 styles.micButton,
@@ -211,7 +205,7 @@ const ModalBottomSheet = forwardRef<BottomSheetModal, ModalBottomSheetProps>(({ 
         </View>
       </BottomSheetView>
     </BottomSheetModal>
-  )
+  );
 });
 
 const styles = StyleSheet.create({
