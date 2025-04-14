@@ -13,6 +13,8 @@ import ModalBottomSheet from '@/components/modals/bottom-modals/ModalBottomSheet
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 //! MODAL FROM REACT NATIVE PAPER
 import ModalRNPaper from '@/components/modals/pop-up-modals/ModalRNPaper';
+//! USE FLASHLIST
+import { FlashList } from '@shopify/flash-list';
 
 const workouts = [
   {
@@ -301,8 +303,9 @@ const search = () => {
           )}
           {/* //! MODAL FROM REACT NATIVE PAPER */}
           <ModalRNPaper visible={modalVisible} onDismiss={() => setModalVisible(false)} selectedWorkout={selectedWorkout} />
-          <FlatList
+          <FlashList
             data={filterWorkouts}
+            estimatedItemSize={200}
             renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} />}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
