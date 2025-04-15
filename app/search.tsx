@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, Image, Keyboard, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Fonts } from '../constants/Fonts';
-import { faClockRotateLeft, faMagnifyingGlass, faMicrophone, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faClockRotateLeft, faThLarge, faList, faMagnifyingGlass, faMicrophone, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
@@ -26,7 +26,7 @@ const workouts = [
     id: '2',
     title: 'Sit Ups',
     workoutDesc: 'Sit ups are a great way to work out your core.',
-  },  
+  },
   {
     id: '3',
     title: 'Planks',
@@ -79,35 +79,36 @@ type workoutProps = {
   workout: WorkoutData;
   setSelectedWorkout: Dispatch<SetStateAction<WorkoutData | null>>;
   setModalVisible: Dispatch<SetStateAction<boolean>>;
+  viewMode: 'list' | 'grid';
 }
 
-const Workout = ({ workout, setSelectedWorkout, setModalVisible }: workoutProps) => {
+const Workout = ({ workout, setSelectedWorkout, setModalVisible, viewMode }: workoutProps) => {
   return (
-    <View style={styles.workout}>
-      <Pressable
-        onPress={() => {
-          setSelectedWorkout(workout);
-          setModalVisible(true);
-        }}
-      >
-        <View style={styles.horizontalContent}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('../assets/images/icon.png')}
-              style={styles.workoutImage}
-            />
-          </View>
-          <View style={styles.workoutTextDescContainer}>
-            <Text style={styles.workoutText}>
-              {workout.title}
-            </Text>
-            <Text style={styles.workoutDesc}>
-              {workout.workoutDesc}
-            </Text>
-          </View>
+    <Pressable
+      style={viewMode === 'grid' ? styles.workoutGrid : styles.workoutList}
+      onPress={() => {
+        setSelectedWorkout(workout);
+        setModalVisible(true);
+      }}
+    >
+      {/* <View style={styles.horizontalContent}> */}
+      <View style={viewMode === 'grid' ? styles.gridContent : styles.listContent}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require('../assets/images/icon.png')}
+            style={styles.workoutImage}
+          />
         </View>
-      </Pressable>
-    </View>
+        <View style={viewMode === 'grid' ? styles.textDescGrid : styles.textDescList}>
+          <Text style={styles.workoutText} numberOfLines={1}>
+            {workout.title}
+          </Text>
+          <Text style={styles.workoutDesc} numberOfLines={2}>
+            {workout.workoutDesc}
+          </Text>
+        </View>
+      </View>
+    </Pressable>
   )
 }
 
@@ -119,6 +120,7 @@ const search = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutData | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>("list");
   const { transcription } = useLocalSearchParams();
   //! MODAL FROM REACT NATIVE BOTTOM SHEET
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -131,7 +133,7 @@ const search = () => {
     bottomSheetModalRef.current?.dismiss();
   }, []);
 
-  
+
   useEffect(() => {
     const loadRecentSearches = async () => {
       try {
@@ -143,7 +145,7 @@ const search = () => {
         console.error('Error loading recent searches:', error);
       }
     };
-    
+
     loadRecentSearches();
   }, []);
 
@@ -167,7 +169,7 @@ const search = () => {
       console.error('Error saving recent searches:', error);
     }
   };
-  
+
   const handleTranscription = useCallback((text: string) => {
     if (text && text !== 'Real-time transcription in progress') {
       setSearching(text);
@@ -217,7 +219,7 @@ const search = () => {
       <LinearGradient_ />
       <BackgroundImage />
       {/* //! MODAL FROM REACT NATIVE BOTTOM SHEET */}
-      <ModalBottomSheet ref={bottomSheetModalRef} onTranscription={handleTranscription} onClose={handleDismissModal}/>
+      <ModalBottomSheet ref={bottomSheetModalRef} onTranscription={handleTranscription} onClose={handleDismissModal} />
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss()
@@ -301,9 +303,36 @@ const search = () => {
               ))}
             </View>
           )}
+          <View style={styles.toggleContainer}>
+            <Pressable
+              onPress={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
+              style={styles.toggleButton}
+            >
+              <FontAwesomeIcon icon={viewMode === 'list' ? faThLarge : faList} color="#fff" size={20} />
+            </Pressable>
+          </View>
           {/* //! MODAL FROM REACT NATIVE PAPER */}
           <ModalRNPaper visible={modalVisible} onDismiss={() => setModalVisible(false)} selectedWorkout={selectedWorkout} />
           <FlashList
+            data={filterWorkouts}
+            numColumns={viewMode === 'grid' ? 2 : 1}
+            estimatedItemSize={viewMode === 'grid' ? 200 : 100}
+            renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} viewMode={viewMode} />}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            onScrollBeginDrag={() => {
+              Keyboard.dismiss();
+              setShowRecent(false);
+            }}
+            ListHeaderComponent={
+              searching !== '' ? (
+                <View style={{ marginBottom: 20 }}>
+                  <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+                </View>
+              ) : null
+            }
+          />
+          {/* <FlashList
             data={filterWorkouts}
             estimatedItemSize={200}
             renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} />}
@@ -320,7 +349,7 @@ const search = () => {
                 </View>
               ) : null
             }
-          />
+          /> */}
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
@@ -375,6 +404,8 @@ const styles = StyleSheet.create({
     width: 45,
   },
   workout: {
+    flex: 1,
+    margin: 100,
     padding: 12,
     marginVertical: 15,
     backgroundColor: '#000',
@@ -384,6 +415,8 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     shadowColor: '#fff',
     elevation: 15,
+    aspectRatio: 1,
+    // maxWidth: '50%'
   },
   horizontalContent: {
     padding: 5,
@@ -406,15 +439,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
-  workoutText: {
+  workoutText: { //! CHANGE THIS TO EACH GRID AND VIEW LAYOUT
     color: '#fff',
     fontSize: 16,
     fontFamily: Fonts.mainFont,
+    // marginTop: 8,
+    // textAlign: 'center',
+    // width: '100%'
   },
   workoutDesc: {
     color: '#fff',
     fontSize: 14,
     fontFamily: Fonts.mainFont,
+    // marginTop: 4,
+    // textAlign: 'center',
+    // width: '100%'
   },
   miscText: {
     color: '#fff',
@@ -467,6 +506,73 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.mainFont,
   },
+  //! TOGGLE BUTTON STYLES
+  toggleContainer: {
+    position: 'absolute',
+    right: 20,
+    top: 90,
+    zIndex: 10
+  },
+  toggleButton: {
+    padding: 8,
+    backgroundColor: '#333',
+    borderRadius: 20,
+  },
+  //! LIST VIEW STYLES
+  workoutList: {
+    padding: 12,
+    marginVertical: 8,
+    marginHorizontal: 5,
+    backgroundColor: '#000',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderBottomWidth: 3,
+    borderColor: '#fff',
+    shadowColor: '#fff',
+    elevation: 15,
+    height: 100,
+    justifyContent: 'center',
+  },
+  listContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textDescList: {
+    marginHorizontal: 10,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  //! GRID VIEW STYLES
+  workoutGrid: {
+    flex: 1,
+    margin: 5,
+    padding: 10,
+    backgroundColor: '#000',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderBottomWidth: 3,
+    borderColor: '#fff',
+    shadowColor: '#fff',
+    elevation: 15,
+    aspectRatio: 1, // Square shape
+    maxWidth: '48%', // 2 columns
+  },
+  gridContent: {
+    flexDirection: 'column', // add this
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    flex: 1,
+  },
+  textContainer: {
+    marginTop: 8,
+    width: '100%',
+  },
+  textDescGrid: {
+    marginHorizontal: 10,
+    flex: 1,
+    justifyContent: 'space-between',
+  }
 })
 
 export default search;
