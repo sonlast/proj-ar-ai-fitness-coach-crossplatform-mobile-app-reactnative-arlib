@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
-import { FlatList, Image, Keyboard, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, Keyboard, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Fonts } from '../constants/Fonts';
 import { faClockRotateLeft, faMagnifyingGlass, faMicrophone, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
