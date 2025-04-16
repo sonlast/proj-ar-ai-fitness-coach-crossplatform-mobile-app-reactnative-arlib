@@ -26,7 +26,7 @@ const workouts = [
     id: '2',
     title: 'Sit Ups',
     workoutDesc: 'Sit ups are a great way to work out your core.',
-  },  
+  },
   {
     id: '3',
     title: 'Planks',
@@ -90,21 +90,21 @@ const Workout = ({ workout, setSelectedWorkout, setModalVisible }: workoutProps)
           setModalVisible(true);
         }}
       >
-        <View style={styles.horizontalContent}>
+        <View style={styles.verticalContent}>
           <View style={styles.imageContainer}>
             <Image
               source={require('../assets/images/icon.png')}
               style={styles.workoutImage}
             />
           </View>
-          <View style={styles.workoutTextDescContainer}>
-            <Text style={styles.workoutText}>
-              {workout.title}
-            </Text>
-            <Text style={styles.workoutDesc}>
+          {/* <View style={styles.workoutTextDescContainer}> */}
+          <Text style={styles.workoutText}>
+            {workout.title}
+          </Text>
+          {/* <Text style={styles.workoutDesc}>
               {workout.workoutDesc}
-            </Text>
-          </View>
+            </Text> */}
+          {/* </View> */}
         </View>
       </Pressable>
     </View>
@@ -131,7 +131,7 @@ const search = () => {
     bottomSheetModalRef.current?.dismiss();
   }, []);
 
-  
+
   useEffect(() => {
     const loadRecentSearches = async () => {
       try {
@@ -143,7 +143,7 @@ const search = () => {
         console.error('Error loading recent searches:', error);
       }
     };
-    
+
     loadRecentSearches();
   }, []);
 
@@ -167,7 +167,7 @@ const search = () => {
       console.error('Error saving recent searches:', error);
     }
   };
-  
+
   const handleTranscription = useCallback((text: string) => {
     if (text && text !== 'Real-time transcription in progress') {
       setSearching(text);
@@ -217,7 +217,7 @@ const search = () => {
       <LinearGradient_ />
       <BackgroundImage />
       {/* //! MODAL FROM REACT NATIVE BOTTOM SHEET */}
-      <ModalBottomSheet ref={bottomSheetModalRef} onTranscription={handleTranscription} onClose={handleDismissModal}/>
+      <ModalBottomSheet ref={bottomSheetModalRef} onTranscription={handleTranscription} onClose={handleDismissModal} />
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss()
@@ -303,24 +303,27 @@ const search = () => {
           )}
           {/* //! MODAL FROM REACT NATIVE PAPER */}
           <ModalRNPaper visible={modalVisible} onDismiss={() => setModalVisible(false)} selectedWorkout={selectedWorkout} />
-          <FlashList
-            data={filterWorkouts}
-            estimatedItemSize={200}
-            renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} />}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            onScrollBeginDrag={() => {
-              Keyboard.dismiss();
-              setShowRecent(false);
-            }}
-            ListHeaderComponent={
-              searching !== '' ? (
-                <View style={{ marginBottom: 20 }}>
-                  <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
-                </View>
-              ) : null
-            }
-          />
+          <View style={{ flex: 1, height: '100%'}}>
+            <FlashList
+              data={filterWorkouts}
+              numColumns={2}
+              estimatedItemSize={200}
+              renderItem={({ item }) => <Workout workout={item} setSelectedWorkout={setSelectedWorkout} setModalVisible={setModalVisible} />}
+              keyExtractor={item => item.id}
+              showsVerticalScrollIndicator={false}
+              onScrollBeginDrag={() => {
+                Keyboard.dismiss();
+                setShowRecent(false);
+              }}
+              ListHeaderComponent={
+                searching !== '' ? (
+                  <View style={{ marginBottom: 20 }}>
+                    <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+                  </View>
+                ) : null
+              }
+            />
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
@@ -373,43 +376,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 45,
     width: 45,
-  },
-  workout: {
-    padding: 12,
-    marginVertical: 15,
-    backgroundColor: '#000',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderBottomWidth: 3,
-    borderColor: '#fff',
-    shadowColor: '#fff',
-    elevation: 15,
-  },
-  horizontalContent: {
-    padding: 5,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
-  imageContainer: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#666',
-    borderRadius: 50,
-  },
-  workoutImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-  },
-  workoutTextDescContainer: {
-    marginHorizontal: 10,
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  workoutText: {
-    color: '#fff',
-    fontSize: 16,
-    fontFamily: Fonts.mainFont,
   },
   workoutDesc: {
     color: '#fff',
@@ -466,6 +432,45 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontFamily: Fonts.mainFont,
+  },
+  //! FLASTLIST GRID STYLES
+  workout: {
+    flex: 1,
+    height: 130,
+    padding: 12,
+    marginVertical: 15,
+    marginHorizontal: 5,
+    backgroundColor: '#000',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderBottomWidth: 3,
+    borderColor: '#fff',
+    shadowColor: '#fff',
+    elevation: 15,
+  },
+  verticalContent: {
+    height: '100%',
+    padding: 5,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#666',
+    borderRadius: 50,
+  },
+  workoutImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+  workoutText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: Fonts.mainFont,
+    marginTop: 10,
+    textAlign: 'center',
   },
 })
 
