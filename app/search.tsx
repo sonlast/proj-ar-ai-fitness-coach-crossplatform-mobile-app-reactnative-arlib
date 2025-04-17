@@ -15,65 +15,9 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import ModalRNPaper from '@/components/modals/pop-up-modals/ModalRNPaper';
 //! USE FLASHLIST
 import { FlashList } from '@shopify/flash-list';
-
-const workouts = [
-  {
-    id: '1',
-    title: 'Push Ups',
-    workoutDesc: 'Push ups are a great way to work out your chest, shoulders, and triceps.',
-  },
-  {
-    id: '2',
-    title: 'Sit Ups',
-    workoutDesc: 'Sit ups are a great way to work out your core.',
-  },
-  {
-    id: '3',
-    title: 'Planks',
-    workoutDesc: 'Planks are a great way to work out your core.',
-  },
-  {
-    id: '4',
-    title: 'Squats',
-    workoutDesc: 'Squats are a great way to work out your legs.',
-  },
-  {
-    id: '5',
-    title: 'Pull Ups',
-    workoutDesc: 'Pull ups are a great way to work out your back and biceps.',
-  },
-  {
-    id: '6',
-    title: 'Lunges',
-    workoutDesc: 'Lunges are a great way to work out your legs.',
-  },
-  {
-    id: '7',
-    title: 'Burpees',
-    workoutDesc: 'Burpees are a great way to work out your whole body.',
-  },
-  {
-    id: '8',
-    title: 'Jumping Jacks',
-    workoutDesc: 'Jumping jacks are a great way to work out your whole body.',
-  },
-  {
-    id: '9',
-    title: 'Mountain Climbers',
-    workoutDesc: 'Mountain climbers are a great way to work out your whole body.',
-  },
-  {
-    id: '10',
-    title: 'High Knees',
-    workoutDesc: 'High knees are a great way to work out your whole body.',
-  },
-]
-
-type WorkoutData = {
-  id: string;
-  title: string;
-  workoutDesc: string;
-}
+//! IMPORTS FOR WORKOUTS
+import { WorkoutData } from '@/types/workout';
+import { workoutImages, workouts } from '@/constants/Workout'
 
 type workoutProps = {
   workout: WorkoutData;
@@ -93,7 +37,7 @@ const Workout = ({ workout, setSelectedWorkout, setModalVisible }: workoutProps)
         <View style={styles.verticalContent}>
           <View style={styles.imageContainer}>
             <Image
-              source={require('../assets/images/icon.png')}
+              source={workoutImages[workout.title] || require('@/assets/images/icon.png')}
               style={styles.workoutImage}
             />
           </View>
@@ -303,7 +247,7 @@ const search = () => {
           )}
           {/* //! MODAL FROM REACT NATIVE PAPER */}
           <ModalRNPaper visible={modalVisible} onDismiss={() => setModalVisible(false)} selectedWorkout={selectedWorkout} />
-          <View style={{ flex: 1, height: '100%'}}>
+          <View style={{ flex: 1, height: '100%' }}>
             <FlashList
               data={filterWorkouts}
               numColumns={2}
