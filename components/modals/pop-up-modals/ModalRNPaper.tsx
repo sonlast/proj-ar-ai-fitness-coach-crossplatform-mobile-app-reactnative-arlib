@@ -4,18 +4,19 @@ import { Portal, Modal } from 'react-native-paper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Fonts } from '@/constants/Fonts';
+import { workoutImages } from '@/constants/Workout';
+import { WorkoutData } from '@/types/workout';
 
 type ModalRNPaperProps = {
   visible: boolean;
   onDismiss: () => void;
-  selectedWorkout?: {
-    title: string;
-    workoutDesc: string;
-  } | null;
+  selectedWorkout?: WorkoutData | null;
 }
 
 const ModalRNPaper = ({ visible, onDismiss, selectedWorkout }: ModalRNPaperProps) => {
-  const image = '../../../assets/images/icon.png'
+  const workoutImage = selectedWorkout?.title 
+    ? workoutImages[selectedWorkout.title as keyof typeof workoutImages]
+    : require('@/assets/images/icon.png')
 
   return (
     <Portal>
@@ -38,7 +39,7 @@ const ModalRNPaper = ({ visible, onDismiss, selectedWorkout }: ModalRNPaperProps
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Image
-              source={require(image)}
+              source={workoutImage}
               style={styles.modalImage}
             />
             <Text style={styles.modalTitle}>{selectedWorkout?.title || 'Workout'}</Text>
