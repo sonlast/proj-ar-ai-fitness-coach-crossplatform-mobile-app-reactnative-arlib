@@ -9,33 +9,10 @@ import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import Loading from '../components/Loading';
 import { uploadAudio } from '../utils/supabase';
-import { Fonts } from '../constants/Fonts';
-
-// Constants
-const WEBSOCKET_URL = 'wss://ar-fitcoach.onrender.com';
-const TRANSCRIBE_URL = 'https://ar-fitcoach.onrender.com/transcribe';
-const INITIAL_COLORS = {
-  icon: "#000",
-  text: "#fff",
-  border: "#D9D9D9"
-};
-const RECORDING_COLORS = {
-  icon: "#f00",
-  text: "#f00",
-  border: "#f00"
-};
-const STARTING_COLORS = {
-  icon: "#0f0",
-  text: "#0f0",
-  border: "#0f0"
-};
-
-// Types
-type ColorState = {
-  icon: string;
-  text: string;
-  border: string;
-};
+import { Fonts } from '@/constants/Fonts';
+import { ColorState } from '@/types/colorstate';
+import { INITIAL_COLORS, RECORDING_COLORS, STARTING_COLORS } from '@/constants/ColorTimes';
+import { WEBSOCKET_URL, TRANSCRIBE_URL } from '@/constants/URLs';
 
 const Index = () => {
   const router = useRouter();
