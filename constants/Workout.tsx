@@ -3,15 +3,15 @@ import { WorkoutData, WorkoutTitle } from "@/types/workout";
 
 export const workoutImages = {
   'Push Ups': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Sit Ups': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Planks': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Squats': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Pull Ups': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Lunges': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Burpees': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Jumping Jacks': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'Mountain Climbers': require('../assets/images/workouts/push_ups/push_ups.jpg'),
-  'High Knees': require('../assets/images/workouts/push_ups/push_ups.jpg'),
+  'Sit Ups': require('../assets/images/workouts/sit_ups/sit_ups.jpg'),
+  'Planks': require('../assets/images/workouts/planks/planks.png'),
+  'Squats': require('../assets/images/workouts/squats/squats.jpg'),
+  'Pull Ups': require('../assets/images/icon.png'),
+  'Lunges': require('../assets/images/workouts/lunges/lunges.png'),
+  'Burpees': require('../assets/images/icon.png'),
+  'Jumping Jacks': require('../assets/images/workouts/jumping_jacks/jumping_jacks.jpg'),
+  'Mountain Climbers': require('../assets/images/workouts/mountain_climbers/mountain_climbers.jpg'),
+  'High Knees': require('../assets/images/workouts/high_knees/high_knees.jpg'),
 }
 
 export const workouts: WorkoutData[] = [
