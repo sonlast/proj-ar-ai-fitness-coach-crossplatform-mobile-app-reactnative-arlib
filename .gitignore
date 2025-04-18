@@ -36,4 +36,7 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# files
+z_code_snippets.tsx
+
 #TODO: SET THIS UP WHEN DONE (WHEN REPO IS PUBLIC)
