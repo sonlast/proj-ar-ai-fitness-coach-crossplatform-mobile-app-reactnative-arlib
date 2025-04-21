@@ -39,4 +39,5 @@ yarn-error.*
 # files
 z_code_snippets.tsx
 
+.idea/
 #TODO: SET THIS UP WHEN DONE (WHEN REPO IS PUBLIC)
