@@ -8,7 +8,7 @@ import * as FileSystem from 'expo-file-system';
 import LinearGradient_ from '../components/LinearGradient_';
 import BackgroundImage from '../components/BackgroundImage';
 import Loading from '../components/Loading';
-import { uploadAudio } from '../utils/supabase';
+import { uploadAudio } from '@/utils/supabase';
 import { Fonts } from '@/constants/Fonts';
 import { ColorState } from '@/types/colorstate';
 import { INITIAL_COLORS, RECORDING_COLORS, STARTING_COLORS } from '@/constants/ColorTimes';
@@ -29,7 +29,7 @@ const Index = () => {
         console.log("Transcript completed.");
         return;
       }
-      
+
       if (message.data && !message.data.includes("Partial Transcript")) {
         const cleanTranscription = message.data.replace(/[.,;!?]+$/, '').trim();
         setTranscription(cleanTranscription);
@@ -112,10 +112,10 @@ const Index = () => {
     try {
       setIsTranscribing(true);
       setColors(INITIAL_COLORS);
-      
+
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
-      
+
       if (!uri) throw new Error("Recording URI is null");
 
       const fileData = await FileSystem.readAsStringAsync(uri, {
@@ -162,12 +162,12 @@ const Index = () => {
       <BackgroundImage />
       <View style={styles.container}>
         <Text style={styles.appName}> AR FitCoach </Text>
-        <Pressable 
-          onPress={isRecording ? stopRecording : startRecording} 
+        <Pressable
+          onPress={isRecording ? stopRecording : startRecording}
           style={[styles.speakButton, { borderWidth: 3, borderColor: colors.border }]}
         >
           {isTranscribing ? (
-            <Loading 
+            <Loading
               loaderStyle={styles.loader}
             />
           ) : (
