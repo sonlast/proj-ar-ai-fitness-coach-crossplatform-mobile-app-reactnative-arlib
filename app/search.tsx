@@ -5,8 +5,8 @@ import { faClockRotateLeft, faMicrophone, faXmark } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
-import LinearGradient_ from '../components/LinearGradient_';
-import BackgroundImage from '../components/BackgroundImage';
+import LinearGradient_ from '@/components/LinearGradient_';
+import BackgroundImage from '@/components/BackgroundImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //! MODAL FROM REACT NATIVE BOTTOM SHEET
 import ModalBottomSheet from '@/components/modals/bottom-modals/ModalBottomSheet';
