@@ -10,9 +10,10 @@ import BackgroundImage from '../components/BackgroundImage';
 import Loading from '../components/Loading';
 import { uploadAudio } from '@/utils/supabase';
 import { Fonts } from '@/constants/Fonts';
-import { ColorState } from '@/types/colorstate';
+import { PATHS } from '@/constants/Routes';
 import { INITIAL_COLORS, RECORDING_COLORS, STARTING_COLORS } from '@/constants/ColorTimes';
 import { WEBSOCKET_URL, TRANSCRIBE_URL } from '@/constants/URLs';
+import { ColorState } from '@/types/colorstate';
 
 const Index = () => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const Index = () => {
         setTranscription(cleanTranscription);
         setIsTranscribing(false);
         router.push({
-          pathname: '/search',
+          pathname: PATHS.SEARCH,
           params: { transcription: cleanTranscription }
         });
       } else {
@@ -185,7 +186,7 @@ const Index = () => {
         <View style={styles.textContainer}>
           <Text style={styles.miscText}>Search Manually</Text>
         </View>
-        <Link href="/search" asChild>
+        <Link href={PATHS.SEARCH} asChild>
           <Pressable style={styles.searchButton}>
             <FontAwesomeIcon icon={faMagnifyingGlass} size={20} style={styles.searchIcon} />
           </Pressable>
