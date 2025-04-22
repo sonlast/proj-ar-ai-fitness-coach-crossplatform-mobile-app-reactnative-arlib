@@ -1,22 +1,37 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, ToastAndroid, View} from 'react-native';
-import {Portal, Modal} from 'react-native-paper';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faXmark} from '@fortawesome/free-solid-svg-icons';
-import {Fonts} from '@/constants/Fonts';
-import {workoutImages} from '@/constants/Workout';
-import {WorkoutData} from '@/types/workout';
+import { Image, Pressable, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import { Portal, Modal } from 'react-native-paper';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Fonts } from '@/constants/Fonts';
+import { workoutImages } from '@/constants/Workout';
+import { WorkoutData } from '@/types/workout';
+import { useRouter } from 'expo-router';
+import { PATHS } from '@/constants/Routes'
 
 type ModalRNPaperProps = {
   visible: boolean;
   onDismiss: () => void;
   selectedWorkout?: WorkoutData | null;
-}
+};
 
-const ModalRNPaper = ({visible, onDismiss, selectedWorkout}: ModalRNPaperProps) => {
+type Paths = typeof PATHS.DEMO | typeof PATHS.TRACK;
+
+const ModalRNPaper = ({ visible, onDismiss, selectedWorkout }: ModalRNPaperProps) => {
   const workoutImage = selectedWorkout?.title
     ? workoutImages[selectedWorkout.title as keyof typeof workoutImages]
     : require('@/assets/images/icon.png')
+  const ROUTER = useRouter();
+  const MODAL_DISMISS_DELAY_MS = 200;
+
+  const navigateToDemoOrTrack = (path: Paths) => {
+    onDismiss();
+    setTimeout(() => {
+      ROUTER.push({
+        pathname: path
+      })
+    }, MODAL_DISMISS_DELAY_MS)
+  }
 
   return (
     <Portal>
@@ -37,7 +52,7 @@ const ModalRNPaper = ({visible, onDismiss, selectedWorkout}: ModalRNPaperProps) 
         }}
         theme={{
           colors: {
-            backdrop: '#rgba(3, 3, 3, 0.6)',
+            backdrop: 'rgba(3, 3, 3, 0.6)',
           }
         }}
       >
@@ -53,7 +68,7 @@ const ModalRNPaper = ({visible, onDismiss, selectedWorkout}: ModalRNPaperProps) 
             </Text>
             <View style={styles.viewDemoAndTrackButton}>
               <Pressable
-                onPress={() => ToastAndroid.show('Demo Pressed', ToastAndroid.SHORT)}
+                onPress={() => navigateToDemoOrTrack(PATHS.DEMO)}
                 style={styles.modalDemoAndTrackButton}
               >
                 <Text style={styles.textDemoAndTrack}>
@@ -61,7 +76,7 @@ const ModalRNPaper = ({visible, onDismiss, selectedWorkout}: ModalRNPaperProps) 
                 </Text>
               </Pressable>
               <Pressable
-                onPress={() => ToastAndroid.show('Track Pressed', ToastAndroid.SHORT)}
+                onPress={() => navigateToDemoOrTrack(PATHS.TRACK)}
                 style={styles.modalDemoAndTrackButton}
               >
                 <Text style={styles.textDemoAndTrack}>
@@ -73,7 +88,7 @@ const ModalRNPaper = ({visible, onDismiss, selectedWorkout}: ModalRNPaperProps) 
               style={styles.modalCloseButton}
               onPress={onDismiss}
             >
-              <FontAwesomeIcon icon={faXmark} size={20} color="#fff"/>
+              <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
             </Pressable>
           </View>
         </View>
@@ -98,7 +113,7 @@ const styles = StyleSheet.create({
     padding: 25,
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
     shadowColor: '#fff',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 10,
     borderWidth: 1,
