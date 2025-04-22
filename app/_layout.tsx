@@ -59,6 +59,8 @@ export default function RootLayout() {
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="search" options={{ headerShown: false }} />
               {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
+              <Stack.Screen name="demo" options={{ headerShown: false }} />
+              <Stack.Screen name="track" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" options={{ headerShown: false }} />
             </Stack>
             <StatusBar style="dark" />
