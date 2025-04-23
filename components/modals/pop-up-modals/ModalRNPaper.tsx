@@ -8,6 +8,7 @@ import { workoutImages } from '@/constants/Workout';
 import { WorkoutData } from '@/types/workout';
 import { useRouter } from 'expo-router';
 import { PATHS } from '@/constants/Routes'
+import { FUNCTION_TYPE } from '@/constants/FunctionType';
 
 type ModalRNPaperProps = {
   visible: boolean;
@@ -72,7 +73,7 @@ const ModalRNPaper = ({ visible, onDismiss, selectedWorkout }: ModalRNPaperProps
                 style={styles.modalDemoAndTrackButton}
               >
                 <Text style={styles.textDemoAndTrack}>
-                  DEMO
+                  {FUNCTION_TYPE.CAPS_DEMO}
                 </Text>
               </Pressable>
               <Pressable
@@ -80,7 +81,7 @@ const ModalRNPaper = ({ visible, onDismiss, selectedWorkout }: ModalRNPaperProps
                 style={styles.modalDemoAndTrackButton}
               >
                 <Text style={styles.textDemoAndTrack}>
-                  TRACK
+                  {FUNCTION_TYPE.CAPS_TRACK}
                 </Text>
               </Pressable>
             </View>
