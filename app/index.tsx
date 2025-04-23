@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Audio } from 'expo-av';
 import { Link, useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
-import LinearGradient_ from '../components/LinearGradient_';
-import BackgroundImage from '../components/BackgroundImage';
-import Loading from '../components/Loading';
-import { uploadAudio } from '@/utils/supabase';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMicrophone, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import LinearGradient_ from '@/components/LinearGradient_';
+import BackgroundImage from '@/components/BackgroundImage';
+import Loading from '@/components/Loading';
 import { Fonts } from '@/constants/Fonts';
 import { PATHS } from '@/constants/Routes';
 import { INITIAL_COLORS, RECORDING_COLORS, STARTING_COLORS } from '@/constants/ColorTimes';
 import { WEBSOCKET_URL, TRANSCRIBE_URL } from '@/constants/URLs';
+import { uploadAudio } from '@/utils/supabase';
 import { ColorState } from '@/types/colorstate';
 
 const Index = () => {
