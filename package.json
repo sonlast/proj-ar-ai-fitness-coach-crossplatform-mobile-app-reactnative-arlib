@@ -73,7 +73,8 @@
     "react-native-webview": "13.12.5",
     "revai-node-sdk": "^3.8.5",
     "ws": "^8.18.1",
-    "@shopify/flash-list": "1.7.3"
+    "@shopify/flash-list": "1.7.3",
+    "expo-camera": "~16.0.18"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
