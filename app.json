@@ -2,7 +2,7 @@
   "expo": {
     "name": "AR FitCoach",
     "slug": "fitness_app_ar",
-    "version": "1.1.4",
+    "version": "1.1.7",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -46,7 +46,20 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
-      ]
+      ],
+      [
+        "@viro-community/react-viro",
+        {
+          "android": {
+            "xRMode": [
+              "GVR",
+              "AR",
+              "OVR_MOBILE"
+            ]
+          }
+        }
+      ],
+      "react-native-vision-camera"
     ],
     "experiments": {
       "typedRoutes": true
