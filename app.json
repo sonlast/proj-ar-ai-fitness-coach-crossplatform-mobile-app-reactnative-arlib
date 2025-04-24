@@ -46,18 +46,6 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
-      ],
-      [
-        "@viro-community/react-viro",
-        {
-          "android": {
-            "xRMode": [
-              "GVR",
-              "AR",
-              "OVR_MOBILE"
-            ]
-          }
-        }
       ]
     ],
     "experiments": {
