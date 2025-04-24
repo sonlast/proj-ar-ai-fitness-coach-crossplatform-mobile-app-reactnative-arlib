@@ -64,6 +64,16 @@
             "savephotosPermission": "$(PRODUCT_NAME) would like to save photos to your library during AR experiences. This is a custom InfoPlist string!"
           }
         }
+      ],
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera.",
+  
+          // optionally, if you want to record audio:
+          "enableMicrophonePermission": true,
+          "microphonePermissionText": "$(PRODUCT_NAME) needs access to your Microphone."
+        }
       ]
     ],
     "experiments": {
