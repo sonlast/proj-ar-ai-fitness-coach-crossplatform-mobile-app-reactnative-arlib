@@ -58,8 +58,7 @@
             ]
           }
         }
-      ],
-      "react-native-vision-camera"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
