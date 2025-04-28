@@ -6,8 +6,6 @@ import { CAMERA_FACES } from '@/constants/CameraFaces';
 import { FUNCTION_TYPE } from '@/constants/FunctionType';
 import DemoOrTrack from '@/components/DemoOrTrack';
 import { startActivityAsync, ActivityAction } from 'expo-intent-launcher';
-import { ViroARSceneNavigator } from '@viro-community/react-viro';
-import ARScene from '@/components/ARScene';
 
 const Demo = () => {
   const [permission, requestPermission] = useCameraPermissions({});
@@ -41,12 +39,6 @@ const Demo = () => {
 
   return (
     <DemoOrTrack functionType={FUNCTION_TYPE.DEMO} cameraFace={CAMERA_FACES.BACK}/>
-    // <ViroARSceneNavigator
-    //   initialScene={{ scene: ARScene }}
-    //   style={{ flex: 1 }}
-    // >
-    //   <ARScene />
-    // </ViroARSceneNavigator>
   );
 };
 
