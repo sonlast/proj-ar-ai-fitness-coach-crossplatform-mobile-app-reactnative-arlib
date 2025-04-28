@@ -40,13 +40,13 @@ const Demo = () => {
   }
 
   return (
-    // <DemoOrTrack functionType={FUNCTION_TYPE.DEMO} cameraFace={CAMERA_FACES.BACK}/>
-    <ViroARSceneNavigator
-      initialScene={{ scene: ARScene }}
-      style={{ flex: 1 }}
-    >
-      <ARScene />
-    </ViroARSceneNavigator>
+    <DemoOrTrack functionType={FUNCTION_TYPE.DEMO} cameraFace={CAMERA_FACES.BACK}/>
+    // <ViroARSceneNavigator
+    //   initialScene={{ scene: ARScene }}
+    //   style={{ flex: 1 }}
+    // >
+    //   <ARScene />
+    // </ViroARSceneNavigator>
   );
 };
 

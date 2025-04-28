@@ -24,7 +24,6 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = Appearance.getColorScheme();
-
   const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
 
   const [fontsLoaded, fontsError] = useFonts({
@@ -42,32 +41,26 @@ export default function RootLayout() {
   }
 
   return (
-    // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-    // ! (1) Provider for REACT NATIVE BOTTOM SHEET
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* //! Provider for REACT NATIVE PAPER */}
       <PaperProvider>
-        {/* //! Provider for REACT NATIVE ACTIONS SHEET */}
         <SheetProvider>
-          {/* //! (2) Provider for REACT NATIVE BOTTOM SHEET */}
           <BottomSheetModalProvider>
             <Stack
               screenOptions={{
                 headerStyle: { backgroundColor: theme.backgroundHeader },
+                animation: 'slide_from_right',
               }}
             >
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="search" options={{ headerShown: false }} />
-              {/* <Stack.Screen name="signup" options={{ headerShown: false }}/> */}
               <Stack.Screen name="demo" options={{ headerShown: false }} />
               <Stack.Screen name="track" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" options={{ headerShown: false }} />
             </Stack>
-            <StatusBar style="dark" />
+            <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           </BottomSheetModalProvider>
         </SheetProvider>
       </PaperProvider>
     </GestureHandlerRootView>
-    // </ThemeProvider>
   );
 }
