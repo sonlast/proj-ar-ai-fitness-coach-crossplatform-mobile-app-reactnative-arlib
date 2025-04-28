@@ -52,9 +52,7 @@
         {
           "android": {
             "xRMode": [
-              "GVR",
-              "AR",
-              "OVR_MOBILE"
+              "AR"
             ]
           },
           "ios": {

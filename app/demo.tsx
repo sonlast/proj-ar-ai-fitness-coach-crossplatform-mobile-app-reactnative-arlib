@@ -6,6 +6,8 @@ import { CAMERA_FACES } from '@/constants/CameraFaces';
 import { FUNCTION_TYPE } from '@/constants/FunctionType';
 import DemoOrTrack from '@/components/DemoOrTrack';
 import { startActivityAsync, ActivityAction } from 'expo-intent-launcher';
+import { ViroARSceneNavigator } from '@viro-community/react-viro';
+import ARScene from '@/components/ARScene';
 
 const Demo = () => {
   const [permission, requestPermission] = useCameraPermissions({});
@@ -13,13 +15,13 @@ const Demo = () => {
   useEffect(() => {
     requestPermission();
   }, []);
-  
+
   const navigatePermissions = async () => {
     if (Platform.OS === 'android') {
       await startActivityAsync(
         ActivityAction.APPLICATION_DETAILS_SETTINGS,
-        { data: 'package:' + 'com.i_son.lastimosa.fitness_app_ar'} 
-      ); 
+        { data: 'package:' + 'com.i_son.lastimosa.fitness_app_ar' }
+      );
     } else {
       await Linking.openSettings();
     }
@@ -33,12 +35,18 @@ const Demo = () => {
             <Text style={styles.fallbackText}>Grant Camera Permissions</Text>
           </Pressable>
         </View>
-    </View>
+      </View>
     );
   }
 
   return (
-    <DemoOrTrack functionType={FUNCTION_TYPE.DEMO} cameraFace={CAMERA_FACES.BACK}/>
+    // <DemoOrTrack functionType={FUNCTION_TYPE.DEMO} cameraFace={CAMERA_FACES.BACK}/>
+    <ViroARSceneNavigator
+      initialScene={{ scene: ARScene }}
+      style={{ flex: 1 }}
+    >
+      <ARScene />
+    </ViroARSceneNavigator>
   );
 };
 
@@ -68,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: Fonts.mainFont,
     textAlign: 'center',
-    color: 'white',  
+    color: 'white',
     padding: 10,
   }
 });
