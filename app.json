@@ -2,7 +2,7 @@
   "expo": {
     "name": "NextGen FitCoach",
     "slug": "fitness_app_ar",
-    "version": "1.2.1",
+    "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true
     },
-    "android": {
+    "android": { 
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -45,22 +45,6 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
-        }
-      ],
-      [
-        "@viro-community/react-viro",
-        {
-          "android": {
-            "xRMode": [
-              "AR"
-            ]
-          },
-          "ios": {
-            "cameraUsagePermission": "$(PRODUCT_NAME) uses your camera for AR experiences. This is a custom InfoPlist string!",
-            "microphoneUsagePermission": "$(PRODUCT_NAME) uses your microphone for AR experiences. This is a custom InfoPlist string!",
-            "photosPermission": "$(PRODUCT_NAME) would like to read photos for AR experiences. This is a custom InfoPlist string!",
-            "savephotosPermission": "$(PRODUCT_NAME) would like to save photos to your library during AR experiences. This is a custom InfoPlist string!"
-          }
         }
       ]
     ],
