@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { Image, Keyboard, Pressable, StyleSheet, SafeAreaView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Fonts } from '@/constants/Fonts';
+import { CONSTANT_COLORS } from '@/constants/Colors';
 import { faClockRotateLeft, faMicrophone, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input } from '@rneui/themed';
@@ -174,7 +175,7 @@ const Search = () => {
           <Text style={styles.appName}>{APPNAME.APPNAME}</Text>
           <Input
             placeholder='Search workout...'
-            placeholderTextColor="#fff"
+            placeholderTextColor={CONSTANT_COLORS.BLACK}
             value={searching}
             onChangeText={updateSearch}
             onFocus={() => searching === '' && setShowRecent(true)}
@@ -265,6 +266,12 @@ const Search = () => {
                 searching !== '' ? (
                   <View style={{ marginBottom: 20 }}>
                     <Text style={styles.miscText}>Matched {filterWorkouts.length === 0 ? "no" : filterWorkouts.length === 1 ? "a" : filterWorkouts.length} result{filterWorkouts.length !== 1 ? 's' : ''}</Text>
+                    {
+                      filterWorkouts.length === 0 && (
+                        <Text style={styles.fallBackText}>
+                          Sorry, we couldn't find any workout that matches your search.
+                        </Text>)
+                    }
                   </View>
                 ) : null
               }
@@ -288,13 +295,13 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   appName: {
-    color: 'white',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 24,
     fontFamily: Fonts.mainFont,
     textAlign: 'center',
   },
   appName2: {
-    color: 'white',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 14,
     fontFamily: Fonts.mainFont,
     textAlign: 'center',
@@ -306,14 +313,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
   },
   inputContainer: {
-    backgroundColor: '#666',
+    backgroundColor: CONSTANT_COLORS.WHITE,
     borderRadius: 50,
     borderWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#fff',
+    borderColor: CONSTANT_COLORS.ORANGE,
   },
   input: {
-    color: 'white',
+    color: CONSTANT_COLORS.BLACK,
     fontSize: 15,
     fontFamily: Fonts.mainFont,
     marginLeft: 25,
@@ -324,7 +331,7 @@ const styles = StyleSheet.create({
     marginRight: -2,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor: '#000',
+    backgroundColor: CONSTANT_COLORS.GREEN,
     borderRadius: 50,
     height: 45,
     width: 45,
@@ -338,6 +345,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontFamily: Fonts.mainFont,
+  },
+  fallBackText: {
+    color: '#fff',
+    fontSize: 22,
+    fontFamily: Fonts.mainFont,
+    textAlign: 'center',
+    marginTop: 100,
   },
   recentSearchesContainer: {
     position: 'absolute',
@@ -392,11 +406,11 @@ const styles = StyleSheet.create({
     padding: 12,
     marginVertical: 15,
     marginHorizontal: 5,
-    backgroundColor: '#000',
+    backgroundColor: CONSTANT_COLORS.GRAY,
     borderRadius: 10,
     borderWidth: 1,
     borderBottomWidth: 3,
-    borderColor: '#fff',
+    borderColor: CONSTANT_COLORS.ORANGE,
     shadowColor: '#fff',
     elevation: 15,
   },
@@ -415,10 +429,10 @@ const styles = StyleSheet.create({
   workoutImage: {
     width: 50,
     height: 50,
-    borderRadius: 50,
+    borderRadius: 50
   },
   workoutText: {
-    color: '#fff',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 16,
     fontFamily: Fonts.mainFont,
     marginTop: 10,
