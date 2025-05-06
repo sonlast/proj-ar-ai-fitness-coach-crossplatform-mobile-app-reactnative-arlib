@@ -4,6 +4,7 @@ import { CameraView, CameraType } from 'expo-camera';
 import { FUNCTION_TYPE } from '@/constants/FunctionType';
 import { CAMERA_FACES } from '@/constants/CameraFaces';
 import { Fonts } from '@/constants/Fonts';
+import { CONSTANT_COLORS } from '@/constants/Colors';
 
 type DemoOrTrackProps = {
   functionType: typeof FUNCTION_TYPE.DEMO | typeof FUNCTION_TYPE.TRACK;
@@ -15,7 +16,7 @@ const DemoOrTrack = ({ functionType, cameraFace }: DemoOrTrackProps) => {
     <View style={styles.container}>
       <CameraView style={styles.camera} facing={cameraFace as CameraType}>
         <View style={styles.buttonContainer}>
-          <Pressable style={styles.button}>
+          <Pressable style={[styles.button, { borderColor: functionType === FUNCTION_TYPE.DEMO ? CONSTANT_COLORS.ORANGE : CONSTANT_COLORS.GREEN }]}>
             <Text style={styles.text}>
               Start {functionType}
             </Text>
@@ -48,17 +49,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'flex-end',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: CONSTANT_COLORS.GRAY,
     padding: 10,
     borderRadius: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: 'white',
   },
   text: {
     fontSize: 30,
     fontFamily: Fonts.mainFont,
-    color: 'white',
+    color: CONSTANT_COLORS.WHITE,
   },
 });
 
