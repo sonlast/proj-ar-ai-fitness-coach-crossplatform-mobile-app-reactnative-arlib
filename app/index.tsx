@@ -15,6 +15,7 @@ import { WEBSOCKET_URL, TRANSCRIBE_URL } from '@/constants/URLs';
 import { APPNAME } from '@/constants/AppName';
 import { uploadAudio } from '@/utils/supabase';
 import { ColorState } from '@/types/colorstate';
+import { CONSTANT_COLORS } from '@/constants/Colors';
 
 const Index = () => {
   const router = useRouter();
@@ -206,12 +207,12 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   appName: {
-    color: 'white',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 60,
     fontFamily: Fonts.mainFont
   },
   appName2: {
-    color: 'white',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 30,
     fontFamily: Fonts.mainFont
   },
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
     height: 200,
     margin: 20,
     borderRadius: 100,
-    backgroundColor: "#D9D9D9",
+    backgroundColor: CONSTANT_COLORS.WHITE,
     marginTop: 90,
     marginHorizontal: "auto"
   },
@@ -234,18 +235,18 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 25,
     borderWidth: 1,
-    borderColor: 'white',
-    backgroundColor: "#000000",
+    borderColor: CONSTANT_COLORS.WHITE,
+    backgroundColor: CONSTANT_COLORS.BLACK,
     marginTop: 40,
     marginHorizontal: "auto"
   },
   miscText: {
-    color: 'white',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 18,
     fontFamily: Fonts.mainFont
   },
   smallText: {
-    color: 'white',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 14,
     fontFamily: Fonts.mainFont
   },
