@@ -18,6 +18,7 @@ import { FlashList } from '@shopify/flash-list';
 //! IMPORTS FOR WORKOUTS
 import { WorkoutData } from '@/types/workout';
 import { workoutImages, workouts } from '@/constants/Workout'
+import { APPNAME } from '@/constants/AppName';
 
 type workoutProps = {
   workout: WorkoutData;
@@ -55,7 +56,7 @@ const Workout = ({ workout, setSelectedWorkout, setModalVisible }: workoutProps)
   )
 }
 
-const search = () => {
+const Search = () => {
   const [searching, setSearching] = useState('');
   const [filterWorkouts, setFilterWorkouts] = useState(workouts);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -169,7 +170,8 @@ const search = () => {
         }}
       >
         <View style={styles.content}>
-          <Text style={styles.appName}> AR FitCoach </Text>
+          <Text style={styles.appName2}>{APPNAME.APPNAME2}</Text>
+          <Text style={styles.appName}>{APPNAME.APPNAME}</Text>
           <Input
             placeholder='Search workout...'
             placeholderTextColor="#fff"
@@ -288,6 +290,12 @@ const styles = StyleSheet.create({
   appName: {
     color: 'white',
     fontSize: 24,
+    fontFamily: Fonts.mainFont,
+    textAlign: 'center',
+  },
+  appName2: {
+    color: 'white',
+    fontSize: 14,
     fontFamily: Fonts.mainFont,
     textAlign: 'center',
   },
@@ -418,4 +426,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default search;
+export default Search;

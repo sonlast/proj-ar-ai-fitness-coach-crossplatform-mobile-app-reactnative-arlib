@@ -12,6 +12,7 @@ import { Fonts } from '@/constants/Fonts';
 import { PATHS } from '@/constants/Routes';
 import { INITIAL_COLORS, RECORDING_COLORS, STARTING_COLORS } from '@/constants/ColorTimes';
 import { WEBSOCKET_URL, TRANSCRIBE_URL } from '@/constants/URLs';
+import { APPNAME } from '@/constants/AppName';
 import { uploadAudio } from '@/utils/supabase';
 import { ColorState } from '@/types/colorstate';
 
@@ -162,7 +163,8 @@ const Index = () => {
       <LinearGradient_ />
       <BackgroundImage />
       <View style={styles.container}>
-        <Text style={styles.appName}> AR FitCoach </Text>
+        <Text style={styles.appName2}>{APPNAME.APPNAME2}</Text>
+        <Text style={styles.appName}>{APPNAME.APPNAME}</Text>
         <Pressable
           onPress={isRecording ? stopRecording : startRecording}
           style={[styles.speakButton, { borderWidth: 3, borderColor: colors.border }]}
@@ -206,6 +208,11 @@ const styles = StyleSheet.create({
   appName: {
     color: 'white',
     fontSize: 60,
+    fontFamily: Fonts.mainFont
+  },
+  appName2: {
+    color: 'white',
+    fontSize: 30,
     fontFamily: Fonts.mainFont
   },
   speakButton: {
