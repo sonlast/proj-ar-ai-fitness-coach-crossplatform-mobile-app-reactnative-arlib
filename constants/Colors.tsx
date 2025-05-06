@@ -21,3 +21,11 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
 };
+
+export const CONSTANT_COLORS = {
+  WHITE: '#ffffff',
+  BLACK: '#000000',
+  GREEN: '#00bf63',
+  ORANGE: '#ff914d',
+  GRAY: '#545454',
+}
