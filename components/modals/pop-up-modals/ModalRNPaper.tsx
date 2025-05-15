@@ -9,6 +9,7 @@ import { WorkoutData } from '@/types/workout';
 import { useRouter } from 'expo-router';
 import { PATHS } from '@/constants/Routes'
 import { FUNCTION_TYPE } from '@/constants/FunctionType';
+import { CONSTANT_COLORS } from '@/constants/Colors';
 
 type ModalRNPaperProps = {
   visible: boolean;
@@ -40,14 +41,10 @@ const ModalRNPaper = ({ visible, onDismiss, selectedWorkout }: ModalRNPaperProps
         visible={visible}
         onDismiss={onDismiss}
         contentContainerStyle={{
-          // backgroundColor: 'transparent',
           justifyContent: 'center',
           alignSelf: 'center',
           margin: 0,
           padding: 0,
-          // borderRadius: 10,
-          // borderWidth: 1,
-          // borderColor: '#ccc',
           width: '100%',
           height: '30%',
         }}
@@ -89,7 +86,7 @@ const ModalRNPaper = ({ visible, onDismiss, selectedWorkout }: ModalRNPaperProps
               style={styles.modalCloseButton}
               onPress={onDismiss}
             >
-              <FontAwesomeIcon icon={faXmark} size={20} color="#fff" />
+              <FontAwesomeIcon icon={faXmark} size={20} color={CONSTANT_COLORS.WHITE} />
             </Pressable>
           </View>
         </View>
@@ -112,13 +109,13 @@ const styles = StyleSheet.create({
     width: '85%',
     borderRadius: 20,
     padding: 25,
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    shadowColor: '#fff',
+    backgroundColor: CONSTANT_COLORS.GRAY,
+    shadowColor: CONSTANT_COLORS.WHITE,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 10,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: CONSTANT_COLORS.ORANGE,
     // elevation: 5,
     overflow: 'hidden',
   },
@@ -130,14 +127,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   modalTitle: {
-    color: '#fff',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 22,
     fontFamily: Fonts.mainFont,
     textAlign: 'center',
     marginBottom: 10,
   },
   modalDescription: {
-    color: '#fff',
+    color: CONSTANT_COLORS.WHITE,
     fontSize: 16,
     fontFamily: Fonts.mainFont,
     textAlign: 'center',
@@ -147,7 +144,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 15,
     right: 15,
-    backgroundColor: '#333',
+    backgroundColor: CONSTANT_COLORS.GREEN,
     borderRadius: 20,
     padding: 5,
   },
@@ -159,17 +156,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   modalDemoAndTrackButton: {
-    backgroundColor: '#fff',
+    backgroundColor: CONSTANT_COLORS.GREEN,
     padding: 25,
-    paddingHorizontal: 35,
+    paddingHorizontal: 30,
     borderRadius: 100,
     borderBottomWidth: 2,
     borderRightWidth: 2,
-    borderColor: '#333',
+    borderColor: CONSTANT_COLORS.GRAY,
   },
   textDemoAndTrack: {
     fontFamily: Fonts.mainFont,
-    fontSize: 15,
+    fontSize: 20,
+    color: CONSTANT_COLORS.WHITE,
   }
 })
 
