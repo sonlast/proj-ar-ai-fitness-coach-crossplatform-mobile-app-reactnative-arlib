@@ -2,9 +2,9 @@
   "expo": {
     "name": "NextGen FitCoach",
     "slug": "fitness_app_ar",
-    "version": "1.2.6",
+    "version": "1.2.4",
     "orientation": "portrait",
-    "icon": "./assets/images/cropped.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -21,7 +21,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/cropped.png"
+      "favicon": "./assets/images/icon.png"
     },
     "plugins": [
       "expo-router",
