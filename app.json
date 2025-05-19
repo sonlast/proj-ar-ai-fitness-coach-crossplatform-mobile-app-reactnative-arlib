@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "NextGen FitCoach",
-    "slug": "fitness_app_ar",
+    "slug": "arfitcoach",
     "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,14 +9,24 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "$(PRODUCT_NAME) would like to read photos for AR experiences. This is a custom InfoPlist string!",
+        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos",
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) uses your camera for AR experiences. This is a custom InfoPlist string!",
+        "NSMicrophoneUsageDescription": "$(PRODUCT_NAME) uses your microphone for AR experiences. This is a custom InfoPlist string!"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.i_son.lastimosa.fitness_app_ar"
+      "package": "com.i_son.lastimosa.fitness_app_ar",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -66,8 +76,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "efeb08fe-ccf5-4b15-8044-9d5cead21cb2"
+        "projectId": "4e30c79f-469d-466e-9d0a-98c6888c5e45"
       }
-    }
+    },
+    "owner": "soc_system"
   }
 }
