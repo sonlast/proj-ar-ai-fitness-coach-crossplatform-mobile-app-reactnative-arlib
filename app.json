@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "NextGen FitCoach",
-    "slug": "arfitcoach",
+    "slug": "fitness_app_ar",
     "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -76,9 +76,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "4e30c79f-469d-466e-9d0a-98c6888c5e45"
+        "projectId": "efeb08fe-ccf5-4b15-8044-9d5cead21cb2"
       }
     },
-    "owner": "soc_system"
+    "owner": "i_son.lastimosa"
   }
 }
